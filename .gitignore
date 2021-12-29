@@ -1,7 +1,7 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
+!**/src/main/com/**
 !**/src/test/**
 
 ### STS ###
@@ -31,4 +31,5 @@ build/
 ### VS Code ###
 .vscode/
 ### Example user template template
+/src/main/java/leetcode/**
 ### Example user template
