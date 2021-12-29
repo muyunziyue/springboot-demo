@@ -16,8 +16,9 @@
         </rollingPolicy>
     </appender>
 
-
-    <root level="debug">
+    <!-- 日志级别排序为： TRACE < DEBUG < INFO < WARN < ERROR -->
+    <!-- 日志输出级别 -->
+    <root level="info">
         <!--<appender-ref ref="STDOUT"/>-->
         <appender-ref ref="LOG_FILE"/>
     </root>
