@@ -20,4 +20,16 @@ public class MyTest {
         String[] beanDefinitionNames = applicationContext.getBeanDefinitionNames();
         Arrays.stream(beanDefinitionNames).forEach(System.out::println);
     }
+    @Test
+    public void test() throws Exception {
+        System.out.println(hexAdd("", -1));
+    }
+
+    public String hexAdd(String hexNumber, int offset) throws Exception{
+        char c = hexNumber.charAt(0);
+        boolean upperCase = Character.isUpperCase(c);
+        Long aLong = Long.valueOf(hexNumber, 16);
+        aLong += offset;
+        return upperCase?Long.toHexString(aLong).toUpperCase(): Long.toHexString(aLong);
+    }
 }

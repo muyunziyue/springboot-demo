@@ -1,6 +1,7 @@
 package com.todo;
 
-import com.myjava.entity.Outer;
+
+import java.text.ParseException;
 
 /**
  * @Author lidexiu
@@ -8,9 +9,17 @@ import com.myjava.entity.Outer;
  * @Description
  */
 public class Test {
-    public static void main(String[] args) {
-        Outer outer = new Outer();
-        Outer.Inner inner = outer.new Inner();
-        inner.hello();
+    public static void main(String[] args) throws ParseException {
+        Integer a = 1;
+        Integer b = 2;
+        System.out.println("a=" + a + ",b="+b);
+        change(a, b);
+        System.out.println("a=" + a + ",b="+b);
+    }
+
+    private static void change(Integer a, Integer b) {
+        a = 3;
+        b =4;
+        System.out.println("a=" + a + ",b="+b);
     }
 }
