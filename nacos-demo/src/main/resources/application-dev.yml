@@ -1,0 +1,40 @@
+nacos:
+  config:
+    bootstrap:
+      #开启配置预加载功能
+      enable: true
+    ## nacos主配置服务器地址
+    server-addr: 192.168.2.71:8848
+    #命名空间
+    namespace: dev
+    ## 主配置 data-id
+    data-id: cmdi
+    ## 主配置 group-id
+    group: DEFAULT_GROUP
+    ## 主配置 配置文件类型
+    type: properties
+    ## 主配置 nacos用户名
+    username: nacos
+    ## 主配置 nacos密码
+    password: nacos
+    ## 主配置 开启自动刷新
+    auto-refresh: true
+    ext-config:
+      - dataIds: cmdi-commons
+        group: cmdi
+        type: properties
+        namespace: prod
+        auto-refresh: true
+
+#开发环境默认的数据库连接配置
+cmdi:
+  datasource:
+    mysql:
+      url: jdbc:mysql://81.70.143.127:3306/cmdi?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+      username: mall
+      password: Mall@#!
+    clickhouse:
+      host: 124.70.42.108
+      port: 8123
+      username: default
+      password: Gooagoo@123

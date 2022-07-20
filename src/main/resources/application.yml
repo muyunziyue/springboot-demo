@@ -1,7 +1,0 @@
-#server.tomcat.threads.max=1
-server:
-  port: 8080
-
-mybatis:
-  mapper-locations: classpath:mappers/*Mapper.xml
-  type-aliases-package: com.example.demo.mybatis.po
