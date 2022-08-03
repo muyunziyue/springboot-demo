@@ -14,6 +14,8 @@
         <module>nacos-demo</module>
         <module>utils-demo</module>
         <module>commons-demo</module>
+        <module>design-pattern-demo</module>
+        <module>jdbc-demo</module>
     </modules>
 
     <properties>

@@ -4,13 +4,13 @@ nacos:
       #开启配置预加载功能
       enable: true
     ## nacos主配置服务器地址
-    server-addr: 192.168.2.71:8848
+    server-addr: 192.168.2.93:8848
     #命名空间
-    namespace: dev
+    namespace: test
     ## 主配置 data-id
-    data-id: cmdi
+    data-id: test
     ## 主配置 group-id
-    group: DEFAULT_GROUP
+    group: test
     ## 主配置 配置文件类型
     type: properties
     ## 主配置 nacos用户名

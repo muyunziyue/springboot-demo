@@ -1,14 +1,13 @@
-package com.example.nacos;
+package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NacosApplication {
+public class DesignPatternApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(NacosApplication.class, args);
-
+		SpringApplication.run(DesignPatternApplication.class, args);
 	}
 
 }
