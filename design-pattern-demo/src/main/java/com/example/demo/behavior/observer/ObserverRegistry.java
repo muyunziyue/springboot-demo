@@ -1,6 +1,5 @@
 package com.example.demo.behavior.observer;
 
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -15,9 +14,8 @@ public class ObserverRegistry {
 
     }
 
-    public List<ObserverAction> getMatchedObserverActions(Object event){
+//    public List<ObserverAction> getMatchedObserverActions(Object event){
+//
+//    }
 
-    }
-
-    public
 }
