@@ -1,4 +1,4 @@
-package com.example.demo.utils.apache.lang3;
+package com.utils.demo.apache.lang3;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;

@@ -17,6 +17,7 @@
         <module>design-pattern-demo</module>
         <module>jdbc-demo</module>
         <module>zk-demo</module>
+        <module>flink-demo</module>
     </modules>
 
     <properties>
