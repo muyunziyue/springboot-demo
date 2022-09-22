@@ -1,6 +1,6 @@
-package com.flink.stream.transform;
+package com.flink.demo.transform;
 
-import com.flink.stream.entity.WordAndOne;
+import com.flink.demo.entity.WordAndOne;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.util.Collector;
 

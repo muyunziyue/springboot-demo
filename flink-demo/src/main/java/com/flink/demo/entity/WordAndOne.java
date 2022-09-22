@@ -1,4 +1,4 @@
-package com.flink.stream.entity;
+package com.flink.demo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

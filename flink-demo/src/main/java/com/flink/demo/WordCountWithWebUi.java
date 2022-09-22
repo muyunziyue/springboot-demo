@@ -1,12 +1,14 @@
-package com.flink.stream;
+package com.flink.demo;
 
-import com.flink.stream.entity.WordAndOne;
-import com.flink.stream.transform.WordCountFlatMap;
+import com.flink.demo.entity.WordAndOne;
+import com.flink.demo.transform.WordCountFlatMap;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+
+import java.util.UUID;
 
 /**
  * @author ldx
@@ -36,5 +38,6 @@ public class WordCountWithWebUi {
         result.print();
 
         env.execute();
+
     }
 }
