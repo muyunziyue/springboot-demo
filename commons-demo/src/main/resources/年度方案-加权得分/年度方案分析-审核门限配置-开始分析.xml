@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <update id="/data/api/indoor/weighted_score/audit_threshold">
+        alter table cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info_local on cluster default
+        update is_high_value_by_score =
+        multiIf(
+        <choose>
+            <when test="params.raw.built_state_new_stock.thresholdType == '10'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    built_state = '10', toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '11'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '12'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '20'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '21'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',concat(province_type,'-',secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <otherwise>
+                1, is_high_value_by_score
+            </otherwise>
+        </choose>,
+        <choose>
+            <when test="params.raw.built_state_new_new.thresholdType == '10'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    built_state = '11', toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '11'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '12'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '20'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '21'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',concat(province_type,'-',secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                </foreach>
+            </when>
+            <otherwise>
+                1, is_high_value_by_score
+            </otherwise>
+        </choose>
+
+        , is_high_value_by_score)
+        ,scoring_threshold = multiIf(
+        <choose>
+            <when test="params.raw.built_state_new_stock.thresholdType == '10'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state == '10', '全国'== #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '11'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',province_type == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '12'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',province == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '20'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',secondary_cover_scene == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_stock.thresholdType == '21'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '10',concat(province_type,'-',secondary_cover_scene) == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <otherwise>
+                1, scoring_threshold
+            </otherwise>
+        </choose>,
+        <choose>
+            <when test="params.raw.built_state_new_new.thresholdType == '10'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state == '11', '全国'== #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '11'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',province_type == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '12'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',province == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '20'">
+                <foreach collection="params.raw.built_state_new_new.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',secondary_cover_scene == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <when test="params.raw.built_state_new_new.thresholdType == '21'">
+                <foreach collection="params.raw.built_state_new_stock.auditThreshold"
+                         item="item" separator="," open="" close="">
+                    and (built_state = '11',concat(province_type,'-',secondary_cover_scene) == #{item.type}), #{item.threshold}
+                </foreach>
+            </when>
+            <otherwise>
+                1, scoring_threshold
+            </otherwise>
+        </choose>
+        , scoring_threshold)
+    where event_id = #{params.raw.id}
+    </update>
+</mapper>
