@@ -5,11 +5,9 @@ package com.demo.test;
  * @date 2022/8/19
  */
 public class Test {
-
-    InterfaceTest test(){
-        return () -> {
-            return "heelo";
-        }
-        ;
-    }
+    /**
+     * a
+     */
+    String newStockSgoAndPasNumSiteNum;
+    String newStockSpeGuaOneAndPassAuditSiteNumSiteNum;
 }

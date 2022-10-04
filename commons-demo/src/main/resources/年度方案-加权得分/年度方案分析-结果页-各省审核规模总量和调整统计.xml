@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="/data/api/indoor/weighted_score/province_audit_site_num">
+select a1.province,
+       a1.provinceName,
+       a1.siteType,
+       a1.siteNum,
+       a1.passAuditSiteNum,
+       a1.passAuditRatio,
+       a1.baseIndicatorAnalysisPassAuditSiteNum,
+       a1.baseMarketAuaranteePassAuditSiteNum,
+       a1.adjustedSiteNum,
+       a1.contrastByPassAuditSiteNum,
+       a1.adjustReason
+from(
+    select province,
+           any(province_name) as provinceName,
+           multiIf(built_state == '10', '共址站',built_state == '11', '新址站', '') as siteType,
+           count(1) as siteNum,
+           count(if(is_high_value_by_score = '1', 1, null)) as passAuditSiteNum,
+           intDivOrZero(toDecimal64(passAuditSiteNum, 4), siteNum) * 100 as passAuditRatio,
+           count(if(and(indicator1_grade_level == 1, indicator6_grade_level == 1, indicator3_grade_level == 1), 1, null)) as baseIndicatorAnalysisPassAuditSiteNum,
+           count(if(and(indicator4_grade_level == 1, indicator12_grade_level == 1, indicator11_grade_level == 1, indicator7_grade_level = 1), 1, null)) as baseMarketAuaranteePassAuditSiteNum,
+           count(if(is_high_value_by_manual_work = '1', 1, null)) as adjustedSiteNum,
+           adjustedSiteNum - passAuditSiteNum as contrastByPassAuditSiteNum,
+           any(manual_work_reason) as adjustReason,
+           multiIf(siteType == '全量站', 1, siteType == '共址站', 2, siteType == '新址站', 3,4) as orderSiteType,
+           any(province_order) as orderProvince
+    from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+    where event_id = #{params.raw.id}
+    group by built_state,province
+    union all
+    select province,
+           any(province_name) as provinceName,
+           '全量站' as siteType,
+           count(1) as siteNum,
+           count(if(is_high_value_by_score = '1', 1, null)) as passAuditSiteNum,
+           intDivOrZero(toDecimal64(passAuditSiteNum, 4), siteNum) * 100 as passAuditRatio,
+           count(if(and(indicator1_grade_level == 1, indicator6_grade_level == 1, indicator3_grade_level == 1), 1, null)) as baseIndicatorAnalysisPassAuditSiteNum,
+           count(if(and(indicator4_grade_level == 1, indicator12_grade_level == 1, indicator11_grade_level == 1, indicator7_grade_level = 1), 1, null)) as baseMarketAuaranteePassAuditSiteNum,
+           count(if(is_high_value_by_manual_work = '1', 1, null)) as adjustedSiteNum,
+           adjustedSiteNum - passAuditSiteNum as contrastByPassAuditSiteNum,
+           any(manual_work_reason) as adjustReason,
+           multiIf(siteType == '全量站', 1, siteType == '共址站', 2, siteType == '新址站', 3,4) as orderSiteType,
+           any(province_order) as orderProvince
+    from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+    where event_id = #{params.raw.id}
+    group by province
+) a1
+order by a1.orderProvince, a1.orderSiteType
+    </select>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="/data/api/indoor/weighted_score/province_site">
+--年度方案分析-结果页-柱状图-各省
+--http://192.1681.64:8088
+select province as province,
+       any(province_name) as provinceName,
+       count(if(built_state = '10', 1, null)) as newStockSiteNum,
+       count(if(and(built_state = '10', is_high_value_by_score == '1'), 1, null)) as newStockPassAuditSiteNum,
+       count(if(built_state = '11', 1, null)) as newNewSiteNum,
+       count(if(and(built_state = '11', is_high_value_by_score == '1'), 1, null)) as newNewPassAuditSiteNum,
+       intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1, null)), 4), count()) * 100 as passAuditRatio
+from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+where event_id = #{params.raw.id}
+group by province
+
+    </select>
+</mapper>

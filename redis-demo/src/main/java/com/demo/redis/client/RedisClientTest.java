@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  */
 public class RedisClientTest {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-
     testAsyncClient();
 
     }

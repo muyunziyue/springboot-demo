@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <insert id="test">
+        select a1.id as aid,
+        a1.province,
+        a1.province_name,
+        a1.province_abbreviation,
+        a1.province_type,
+        a1.province_order,
+        a1.citys,
+        a1.citys_name,
+        a1.citys_abbreviation,
+        a1.citys_type,
+        a1.citys_order,
+        a1.citys_distribution,
+        a1.event_id,
+        a1.site_type,
+        a1.data_sampling_time,
+        a1.area_type,
+        a1.site_name,
+        a1.site_location,
+        a1.longitude,
+        a1.latitude,
+        a1.cover_area,
+        a1.cover_scene,
+        a1.secondary_cover_scene,
+        a1.other_cover_scene,
+        a1.related_room_location_4g,
+        a1.built_state_4g,
+        a1.base_station_id_4g,
+        a1.e_cgi_set_4g,
+        a1.built_way_4g,
+        a1.indoor_building_site_2g_900m_distri_sys_4g,
+        a1.indoor_building_site_cell_distri_sys_4g,
+        a1.indoor_distri_pico_cover_area_4g,
+        a1.indoor_integration_pico_cover_area_4g,
+        a1.indoor_trad_single_das_cover_area_4g,
+        a1.indoor_trad_double_das_cover_area_4g,
+        a1.indoor_fiber_distri_sys_cover_area_4g,
+        a1.indoor_freq_conver_distri_sys_cover_area_4g,
+        a1.indoor_ext_pico_cover_area_4g,
+        a1.indoor_inter_building_cover_area_4g,
+        a1.indoor_bs_num_4g,
+        a1.indoor_p_cell_num_4g,
+        a1.frequency_4g,
+        a1.freq_num_4g,
+        a1.indoor_building_site_ruu_num_4g,
+        a1.indoor_building_site_pruu_num_4g,
+        a1.indoor_building_site_ext_pico_remote_unit_num_4g,
+        a1.related_room_location_5g,
+        a1.distri_sta_5g,
+        a1.built_state_5g,
+        a1.base_station_id_5g,
+        a1.e_cgi_collection_5g,
+        a1.built_way_5g,
+        a1.indoor_distri_pico_cover_area_2t_5g,
+        a1.indoor_distri_pico_cover_area_4t_5g,
+        a1.indoor_integration_pico_cover_area_5g,
+        a1.indoor_trad_single_das_cover_area_5g,
+        a1.indoor_trad_double_das_cover_area_5g,
+        a1.indoor_fiber_distri_sys_cover_area_5g,
+        a1.indoor_freq_conver_distri_sys_cover_area_5g,
+        a1.indoor_ext_pico_cover_area_5g,
+        a1.indoor_inter_building_cover_area_5g,
+        a1.indoor_bs_num_5g,
+        a1.indoor_p_cell_num_5g,
+        a1.frequency_point_5g,
+        a1.freq_num_5g,
+        a1.indoor_building_site_rru_num_5g,
+        a1.indoor_building_site_pruu_num_5g,
+        a1.indoor_building_site_ext_pico_remote_unit_num_5g,
+        a1.rival,
+        a1.rival_common_site,
+        a1.rival_pre,
+        a1.spe_gua,
+        a1.spe_gua_type,
+        a1.vert_ind_dem,
+        a1.perday_flow_prediction_5g,
+        a1.built_state,
+        a1.indicator3_item3,
+        a1.indicator3_item7,
+        a1.indicator_name,
+        a1.indicator_value,
+        a1.indicator_algorithm_type,
+        a1.indicator_item_name,
+        a1.indicator_level,
+        a1.indicator_score,
+        a1.dwd_site_for_annual_plan_indoor_info_id,
+        a1.dwd_site_for_annual_plan_indoor_info_event_id,
+        indexOf(
+        <foreach collection="params.raw.built_state_new_stock.weight_pool"
+                 item="item" separator="," open="[" close="]">
+            #{item.indicatorName}
+        </foreach>, a1.indicator_name) as new_stock_weight_name_index,
+        cast(<foreach collection="params.raw.built_state_new_stock.weight_pool"
+                      item="item" separator="," open="[" close="]">
+        #{item.indicatorWeightRatio}
+    </foreach> as Array(Decimal64(5))) as new_stock_weight_weight_array,
+        indexOf(
+        <foreach collection="params.raw.built_state_new_new.weight_pool"
+                 item="item" separator="," open="[" close="]">
+            #{item.indicatorName}
+        </foreach>, a1.indicator_name) as new_new_weight_name_index,
+        cast(<foreach collection="params.raw.built_state_new_new.weight_pool"
+                      item="item" separator="," open="[" close="]">
+        #{item.indicatorWeightRatio}
+    </foreach> as Array(Decimal64(5))) as new_new_weight_weight_array,
+        indexOf(
+        <foreach collection="params.raw.built_state_new_stock.one_vote_through_pool"
+                 item="item" separator="," open="[" close="]">
+            #{item.indicatorName}
+        </foreach>, a1.indicator_name) as new_stock_one_name_index,
+        <foreach collection="params.raw.built_state_new_stock.one_vote_through_pool"
+                 item="item" separator="," open="[" close="]">
+            <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
+                #{item}
+            </foreach>
+        </foreach>                    as new_stock_one_level_array,
+        indexOf(
+        <foreach collection="params.raw.built_state_new_new.one_vote_through_pool"
+                 item="item" separator="," open="[" close="]">
+            #{item.indicatorName}
+        </foreach>, a1.indicator_name) as new_new_one_name_index,
+        <foreach collection="params.raw.built_state_new_new.one_vote_through_pool"
+                 item="item" separator="," open="[" close="]">
+            <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
+                #{item}
+            </foreach>
+        </foreach>                    as new_new_one_level_array,
+        has(multiIf(and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
+        and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as indicator_one_vote_boolean,
+
+        toDecimal64(multiIf(and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
+        and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
+        multiIf(and(a1.built_state = '10',new_stock_weight_name_index),1, and(a1.built_state = '11',new_new_weight_name_index),1,0) as is_indicator_weighted,
+        multiIf(and(a1.built_state = '10',new_stock_one_name_index),1, and(a1.built_state = '11', new_new_one_name_index),1,0) as is_indicator_one_vote
+        from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
+        where a1.id global in (
+        <foreach collection="params.raw.built_state_new_stock.one_vote_through_pool" item="item" separator="," close="" open="">
+            #{item.indicatorGradeId}
+        </foreach>,
+        <foreach collection="params.raw.built_state_new_stock.weight_pool" item="item" separator="," close="" open="">
+            #{item.indicatorGradeId}
+        </foreach>,
+        <foreach collection="params.raw.built_state_new_new.one_vote_through_pool" item="item" separator="," close="" open="">
+            #{item.indicatorGradeId}
+        </foreach>,
+        <foreach collection="params.raw.built_state_new_new.weight_pool" item="item" separator="," close="" open="">
+            #{item.indicatorGradeId}
+        </foreach>)
+    </insert>
+</mapper>
