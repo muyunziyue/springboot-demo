@@ -82,31 +82,31 @@
             <when test="params.raw.built_state_new_stock.thresholdType == '10'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state == '10', '全国'== #{item.type}), #{item.threshold}
+                    and (built_state == '10', '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_stock.thresholdType == '11'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '10',province_type == #{item.type}), #{item.threshold}
+                    and (built_state = '10',province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_stock.thresholdType == '12'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '10',province == #{item.type}), #{item.threshold}
+                    and (built_state = '10',province == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_stock.thresholdType == '20'">
                 <foreach collection="params.raw.built_state_new_new.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '10',secondary_cover_scene == #{item.type}), #{item.threshold}
+                    and (built_state = '10',secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_stock.thresholdType == '21'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '10',concat(province_type,'-',secondary_cover_scene) == #{item.type}), #{item.threshold}
+                    and (built_state = '10',concat(province_type,'-',secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <otherwise>
@@ -117,31 +117,31 @@
             <when test="params.raw.built_state_new_new.thresholdType == '10'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state == '11', '全国'== #{item.type}), #{item.threshold}
+                    and (built_state == '11', '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_new.thresholdType == '11'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '11',province_type == #{item.type}), #{item.threshold}
+                    and (built_state = '11',province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_new.thresholdType == '12'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '11',province == #{item.type}), #{item.threshold}
+                    and (built_state = '11',province == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_new.thresholdType == '20'">
                 <foreach collection="params.raw.built_state_new_new.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '11',secondary_cover_scene == #{item.type}), #{item.threshold}
+                    and (built_state = '11',secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <when test="params.raw.built_state_new_new.thresholdType == '21'">
                 <foreach collection="params.raw.built_state_new_stock.auditThreshold"
                          item="item" separator="," open="" close="">
-                    and (built_state = '11',concat(province_type,'-',secondary_cover_scene) == #{item.type}), #{item.threshold}
+                    and (built_state = '11',concat(province_type,'-',secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
                 </foreach>
             </when>
             <otherwise>
