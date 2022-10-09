@@ -143,7 +143,7 @@
         multiIf(and(a1.built_state = '10',new_stock_weight_name_index),1, and(a1.built_state = '11',new_new_weight_name_index),1,0) as is_indicator_weighted,
         multiIf(and(a1.built_state = '10',new_stock_one_name_index),1, and(a1.built_state = '11', new_new_one_name_index),1,0) as is_indicator_one_vote
         from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
-        where a1.id global in (''
+        where a1.event_id global in (''
         <choose>
             <when test="params.raw.builtStateNewStock == null">
 
