@@ -126,7 +126,7 @@
                   any(b1.indicator3_item3) as indicator3_item3,
                   any(b1.indicator3_item7) as indicator3_item7,
                   multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') as scoring_type, --打分类型:1-一票通过 2-专家权重打分 3-熵权权重打分
-                  multiIf(and(scoring_type == '1', has(groupArray(b1.indicator_one_vote_boolean), 1)),toDecimal64(100, 5), scoring_type == '2', toDecimal64(sum(b1.indicator_weighted_score * b1.indicator_score), 5),0) as score,
+                  multiIf(and(scoring_type == '1', has(groupArray(b1.indicator_one_vote_boolean), 1)),toDecimal64(100, 5), scoring_type == '2', toDecimal64(sum(if(b1.is_indicator_weighted, b1.indicator_weighted_score * b1.indicator_score, null)), 5),0) as score,
                   toDecimal64(0, 5) as scoring_threshold,
                   ['scene_value', 'policy_guarantee', 'network_complaints', 'rival_pre'] as market_guarantee_indicator_list, --市场保障- 场景价值、政策保障、网络投诉、竞对压力
                   ['5g_to_4g','5g_terminal_penetration','flow_density'] as indicator_analysis_indicator_list, --指标分析- 5G倒流4G、5G终端渗透率、流量密度
@@ -470,9 +470,13 @@
 
         toDecimal64(multiIf(and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
         and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
-        multiIf(and(a1.built_state = '10',new_stock_weight_name_index),1, and(a1.built_state = '11',new_new_weight_name_index),1,0) as is_indicator_weighted,
-        multiIf(and(a1.built_state = '10',new_stock_one_name_index),1, and(a1.built_state = '11', new_new_one_name_index),1,0) as is_indicator_one_vote
-        from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
+        multiIf(
+        and(a1.built_state = '10',new_stock_weight_name_index), 1,
+        and(a1.built_state = '11',new_new_weight_name_index), 1, 0) as is_indicator_weighted,
+            has(multiIf(
+        and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
+        and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as is_indicator_one_vote
+            from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
         where a1.event_id global in (''
         <choose>
             <when test="params.raw.builtStateNewStock == null">
