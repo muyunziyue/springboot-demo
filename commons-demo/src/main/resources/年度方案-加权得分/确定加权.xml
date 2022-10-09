@@ -333,46 +333,138 @@
         a1.indicator_score,
         a1.dwd_site_for_annual_plan_indoor_info_id,
         a1.dwd_site_for_annual_plan_indoor_info_event_id,
-        indexOf(
-        <foreach collection="params.raw.built_state_new_stock.weight_pool"
-                 item="item" separator="," open="[" close="]">
-            #{item.indicatorName}
-        </foreach>, a1.indicator_name) as new_stock_weight_name_index,
-        cast(<foreach collection="params.raw.built_state_new_stock.weight_pool"
-                      item="item" separator="," open="[" close="]">
-        #{item.indicatorWeightRatio}
-    </foreach> as Array(Decimal64(5))) as new_stock_weight_weight_array,
-        indexOf(
-        <foreach collection="params.raw.built_state_new_new.weight_pool"
-                 item="item" separator="," open="[" close="]">
-            #{item.indicatorName}
-        </foreach>, a1.indicator_name) as new_new_weight_name_index,
-        cast(<foreach collection="params.raw.built_state_new_new.weight_pool"
-                      item="item" separator="," open="[" close="]">
-        #{item.indicatorWeightRatio}
-    </foreach> as Array(Decimal64(5))) as new_new_weight_weight_array,
-        indexOf(
-        <foreach collection="params.raw.built_state_new_stock.one_vote_through_pool"
-                 item="item" separator="," open="[" close="]">
-            #{item.indicatorName}
-        </foreach>, a1.indicator_name) as new_stock_one_name_index,
-        <foreach collection="params.raw.built_state_new_stock.one_vote_through_pool"
-                 item="item" separator="," open="[" close="]">
-            <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
-                #{item}
-            </foreach>
-        </foreach>                    as new_stock_one_level_array,
-        indexOf(
-        <foreach collection="params.raw.built_state_new_new.one_vote_through_pool"
-                 item="item" separator="," open="[" close="]">
-            #{item.indicatorName}
-        </foreach>, a1.indicator_name) as new_new_one_name_index,
-        <foreach collection="params.raw.built_state_new_new.one_vote_through_pool"
-                 item="item" separator="," open="[" close="]">
-            <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
-                #{item}
-            </foreach>
-        </foreach>                    as new_new_one_level_array,
+        indexOf(cast(
+        <choose>
+            <when test="params.raw.builtStateNewStock ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewStock.weightPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorName}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(String)), a1.indicator_name) as new_stock_weight_name_index,
+        cast(
+        <choose>
+            <when test="params.raw.builtStateNewStock ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewStock.weightPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorWeightRatio}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(Decimal64(5))) as new_stock_weight_weight_array,
+        indexOf(cast(
+        <choose>
+            <when test="params.raw.builtStateNewNew ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewNew.weightPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorName}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(String)), a1.indicator_name) as new_new_weight_name_index,
+        cast(
+        <choose>
+            <when test="params.raw.builtStateNewNew ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewNew.weightPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorWeightRatio}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(Decimal64(5))) as new_new_weight_weight_array,
+        indexOf(cast(
+        <choose>
+            <when test="params.raw.builtStateNewStock ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorName}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(String)), a1.indicator_name) as new_stock_one_name_index,
+        cast(
+        <choose>
+            <when test="params.raw.builtStateNewStock ==null ">
+                [[]]
+            </when>
+            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool"
+                         item="item" separator="," open="[" close="]">
+                    <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
+                        #{item}
+                    </foreach>
+                </foreach>
+            </when>
+            <otherwise>
+                [[]]
+            </otherwise>
+        </choose>
+        as Array(Array(Int32)))                     as new_stock_one_level_array,
+        indexOf(cast(
+        <choose>
+            <when test="params.raw.builtStateNewNew ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorName}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(String)), a1.indicator_name) as new_new_one_name_index,
+        cast(
+        <choose>
+            <when test="params.raw.builtStateNewNew ==null ">
+                [[]]
+            </when>
+            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
+                <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool"
+                         item="item" separator="," open="[" close="]">
+                    <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
+                        #{item}
+                    </foreach>
+                </foreach>
+            </when>
+            <otherwise>
+                [[]]
+            </otherwise>
+        </choose>
+        as Array(Array(Int32)))                     as new_new_one_level_array,
         has(multiIf(and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
         and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as indicator_one_vote_boolean,
 
@@ -381,19 +473,58 @@
         multiIf(and(a1.built_state = '10',new_stock_weight_name_index),1, and(a1.built_state = '11',new_new_weight_name_index),1,0) as is_indicator_weighted,
         multiIf(and(a1.built_state = '10',new_stock_one_name_index),1, and(a1.built_state = '11', new_new_one_name_index),1,0) as is_indicator_one_vote
         from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
-        where a1.id global in (
-        <foreach collection="params.raw.built_state_new_stock.one_vote_through_pool" item="item" separator="," close="" open="">
-            #{item.indicatorGradeId}
-        </foreach>,
-        <foreach collection="params.raw.built_state_new_stock.weight_pool" item="item" separator="," close="" open="">
-            #{item.indicatorGradeId}
-        </foreach>,
-        <foreach collection="params.raw.built_state_new_new.one_vote_through_pool" item="item" separator="," close="" open="">
-            #{item.indicatorGradeId}
-        </foreach>,
-        <foreach collection="params.raw.built_state_new_new.weight_pool" item="item" separator="," close="" open="">
-            #{item.indicatorGradeId}
-        </foreach>)
+        where a1.id global in (''
+        <choose>
+            <when test="params.raw.builtStateNewStock == null">
+
+            </when>
+            <when test="params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
+                ,
+                <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool" item="item" separator="," close="" open="">
+                    #{item.indicatorGradeId}
+                </foreach>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="params.raw.builtStateNewStock == null">
+            </when>
+            <when test="params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
+                ,
+                <foreach collection="params.raw.builtStateNewStock.weightPool" item="item" separator="," close="" open="">
+                    #{item.indicatorGradeId}
+                </foreach>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="params.raw.builtStateNewNew == null">
+            </when>
+            <when test="params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
+                ,
+                <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool" item="item" separator="," close="" open="">
+                    #{item.indicatorGradeId}
+                </foreach>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="params.raw.builtStateNewNew == null">
+
+            </when>
+            <when test="params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
+                ,
+                <foreach collection="params.raw.builtStateNewNew.weightPool" item="item" separator="," close="" open="">
+                    #{item.indicatorGradeId}
+                </foreach>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        )
                        )  b1
            group by b1.dwd_site_for_annual_plan_indoor_info_id
     </insert>

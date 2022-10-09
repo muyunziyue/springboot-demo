@@ -2,206 +2,187 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.test.Test">
     <select id="/data/api/indoor/weighted_score/audit">
-        --年度方案分析-结果页-门限统计表
---http://192.1681.64:8088/data/api/indoor/weighted_score/audit
-/**
-  {
-  "code": "200",
-  "data": [
-    {
-      "siteNum": 3,
-      "dataGranularityFirst": "三类",
-      "dataGranularitySecond": "山东省",
-      "dataGranularityThird": "5A级景区",
-      "newStockSiteNum": 3,
-      "newStockSpeGuaOneSiteNum": 3,
-      "newStockScoringthreshold": 3,
-      "newStockPassAuditSiteNum": 3,
-      "newStockSpeGuaOneAndPassAuditSiteNumSiteNum": 3,
-      "newNewStockSiteNum": 3,
-      "newNewStockSpeGuaOneSiteNum": 3,
-      "newNewScoringthreshold": 3,
-      "newNewStockPassAuditSiteNum": 3,
-      "newNewStockSpeGuaOneAndPassAuditSiteNumSiteNum": 3
-        "passAuditRatio": "100"
-    }
-  ],
-  "msg": "成功!"
-}
- */
-select dataGranularityFirst,
-       orderFirst,
-       dataGranularitySecond,
-       orderSecond,
-       dataGranularityThird,
-       orderThird,
-       siteNum,
-       newStockSiteNum,
-       newStockSpeGuaOneSiteNum,
-       newStockScoringthreshold,
-       newStockPassAuditSiteNum,
-       newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       newNewSiteNum,
-       newNewSpeGuaOneSiteNum,
-       newNewScoringthreshold,
-       newNewPassAuditSiteNum,
-       newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-from(
-select '全国'                                    as dataGranularityFirst,
-       concat('1', '')                         as orderFirst,
-       ''                                      as dataGranularitySecond,
-       ''                                      as orderSecond,
-       ''                                      as dataGranularityThird,
-       ''                                      as orderThird,
-       count(1)                                as siteNum,
-       count(if(built_state == '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state == '10',spe_gua == '一级'), 1, null))     as newStockSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newStockScoringthreshold,
-       count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-       count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       count(if(built_state == '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state == '11',spe_gua == '一级'), 1, null))     as newNewSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newNewScoringthreshold,
-       count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-       count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-       from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-where event_id = #{params.raw.id}
-having siteNum > 0
-union all
-select
-       '全国'                                               as dataGranularityFirst,
-       concat('1', '')                                    as orderFirst,
-       secondary_cover_scene                              as dataGranularitySecond,
-       concat('1', secondary_cover_scene)                 as orderSecond,
-       ''                                                 as dataGranularityThird,
-       ''                                                 as orderThird,
-       count(1)                                           as siteNum,
-       count(if(built_state == '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state == '10',spe_gua == '一级'), 1, null))     as newStockSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newStockScoringthreshold,
-       count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-       count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       count(if(built_state == '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state == '11',spe_gua == '一级'), 1, null))     as newNewSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newNewScoringthreshold,
-       count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-       count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-where event_id = #{params.raw.id}
-group by secondary_cover_scene
-union all
-select
-       province_type                                      as dataGranularityFirst,
-       concat('2', multiIf(
-                   province_type = '一类', '1',
-                   province_type = '二类', '2',
-                   province_type = '三类', '3',
-                   province_type = '四类', '4',
-                   province_type = '五类', '5',
-                   province_type = '六类', '6', '7'))       as orderFirst,
-       ''                                                 as dataGranularitySecond,
-       ''                                                 as orderSecond,
-       ''                                                 as dataGranularityThird,
-       ''                                                 as orderThird,
-       count(1)                                           as siteNum,
-       count(if(built_state == '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state == '10',spe_gua == '一级'), 1, null))     as newStockSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newStockScoringthreshold,
-       count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-       count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       count(if(built_state == '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state == '11',spe_gua == '一级'), 1, null))     as newNewSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newNewScoringthreshold,
-       count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-       count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-where event_id = #{params.raw.id}
-group by province_type
-union all
-select
-       province_type                                      as dataGranularityFirst,
-       concat('2', multiIf(
-                   province_type = '一类', '1',
-                   province_type = '二类', '2',
-                   province_type = '三类', '3',
-                   province_type = '四类', '4',
-                   province_type = '五类', '5',
-                   province_type = '六类', '6', '7'))       as orderFirst,
-       secondary_cover_scene                              as dataGranularitySecond,
-       concat('1', secondary_cover_scene)                 as orderSecond,
-       ''                                                 as dataGranularityThird,
-       ''                                                 as orderThird,
-       count(1)                                           as siteNum,
-       count(if(built_state == '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state == '10',spe_gua == '一级'), 1, null))     as newStockSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newStockScoringthreshold,
-       count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-       count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       count(if(built_state == '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state == '11',spe_gua == '一级'), 1, null))     as newNewSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newNewScoringthreshold,
-       count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-       count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-where event_id = #{params.raw.id}
-group by province_type, secondary_cover_scene
-union all
-select
-       province_type                                      as dataGranularityFirst,
-       concat('2', multiIf(
-                   province_type = '一类', '1',
-                   province_type = '二类', '2',
-                   province_type = '三类', '3',
-                   province_type = '四类', '4',
-                   province_type = '五类', '5',
-                   province_type = '六类', '6', '7'))       as orderFirst,
-       province_name                                      as dataGranularitySecond,
-       concat('2', any(toString(province_order)))         as orderSecond,
-       ''                                                 as dataGranularityThird,
-       ''                                                 as orderThird,
-       count(1)                                           as siteNum,
-       count(if(built_state == '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state == '10',spe_gua == '一级'), 1, null))     as newStockSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newStockScoringthreshold,
-       count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-       count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       count(if(built_state == '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state == '11',spe_gua == '一级'), 1, null))     as newNewSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newNewScoringthreshold,
-       count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-       count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-where event_id = #{params.raw.id}
-group by province_type, province_name
-union all
-select
-       province_type                                      as dataGranularityFirst,
-       concat('2', multiIf(
-                   province_type = '一类', '1',
-                   province_type = '二类', '2',
-                   province_type = '三类', '3',
-                   province_type = '四类', '4',
-                   province_type = '五类', '5',
-                   province_type = '六类', '6', '7'))       as orderFirst,
-       province_name                                      as dataGranularitySecond,
-       concat('2', any(toString(province_order)))         as orderSecond,
-       secondary_cover_scene                              as dataGranularityThird,
-       concat('1', secondary_cover_scene)                 as orderThird,
-       count(1)                                           as siteNum,
-       count(if(built_state == '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state == '10',spe_gua == '一级'), 1, null))     as newStockSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newStockScoringthreshold,
-       count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-       count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newStockSpeGuaOneAndPassAuditSiteNumSiteNum,
-       count(if(built_state == '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state == '11',spe_gua == '一级'), 1, null))     as newNewSpeGuaOneSiteNum,
-       any(scoring_threshold)                  as newNewScoringthreshold,
-       count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-       count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua=='一级'), 1, null))     as newNewSpeGuaOneAndPassAuditSiteNumSiteNum
-from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-where event_id = #{params.raw.id}
-group by province_type, province_name, secondary_cover_scene
-) a1
-order by a1.orderFirst, a1.orderSecond, a1.orderThird
+        select dataGranularityFirst,
+               orderFirst,
+               dataGranularitySecond,
+               orderSecond,
+               dataGranularityThird,
+               orderThird,
+               siteNum,
+               newStockSiteNum,
+               newStockSpeGuaSiteNum,
+               newStockScoringThreshold,
+               newStockPassAuditSiteNum,
+               newStockSpeGuaAndPassAuditSiteNum,
+               newNewSiteNum,
+               newNewSpeGuaSiteNum,
+               newNewScoringThreshold,
+               newNewPassAuditSiteNum,
+               newNewSpeGuaAndPassAuditSiteNum,
+               passAuditRatio
+        from(
+        select '全国'                                    as dataGranularityFirst,
+               concat('1', '')                         as orderFirst,
+               ''                                      as dataGranularitySecond,
+               ''                                      as orderSecond,
+               ''                                      as dataGranularityThird,
+               ''                                      as orderThird,
+               count(1)                                as siteNum,
+               count(if(built_state == '10', 1, null)) as newStockSiteNum,
+               count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        any(scoring_threshold)                  as newStockScoringThreshold,
+        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
+        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
+        count(if(built_state == '11', 1, null)) as newNewSiteNum,
+        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        any(scoring_threshold)                  as newNewScoringThreshold,
+        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
+        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        where event_id = #{params.raw.id}
+        having siteNum > 0
+        union all
+        select
+        '全国'                                               as dataGranularityFirst,
+        concat('1', '')                                    as orderFirst,
+        secondary_cover_scene                              as dataGranularitySecond,
+        concat('1', secondary_cover_scene)                 as orderSecond,
+        ''                                                 as dataGranularityThird,
+        ''                                                 as orderThird,
+        count(1)                                           as siteNum,
+        count(if(built_state == '10', 1, null)) as newStockSiteNum,
+        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        any(scoring_threshold)                  as newStockScoringThreshold,
+        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
+        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
+        count(if(built_state == '11', 1, null)) as newNewSiteNum,
+        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        any(scoring_threshold)                  as newNewScoringThreshold,
+        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
+        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+
+        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        where event_id = #{params.raw.id}
+        group by secondary_cover_scene
+        union all
+        select
+        province_type                                      as dataGranularityFirst,
+        concat('2', multiIf(
+        province_type = '一类', '1',
+        province_type = '二类', '2',
+        province_type = '三类', '3',
+        province_type = '四类', '4',
+        province_type = '五类', '5',
+        province_type = '六类', '6', '7'))       as orderFirst,
+        ''                                                 as dataGranularitySecond,
+        ''                                                 as orderSecond,
+        ''                                                 as dataGranularityThird,
+        ''                                                 as orderThird,
+        count(1)                                           as siteNum,
+        count(if(built_state == '10', 1, null)) as newStockSiteNum,
+        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        any(scoring_threshold)                  as newStockScoringThreshold,
+        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
+        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
+        count(if(built_state == '11', 1, null)) as newNewSiteNum,
+        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        any(scoring_threshold)                  as newNewScoringThreshold,
+        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
+        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        where event_id = #{params.raw.id}
+        group by province_type
+        union all
+        select
+        province_type                                      as dataGranularityFirst,
+        concat('2', multiIf(
+        province_type = '一类', '1',
+        province_type = '二类', '2',
+        province_type = '三类', '3',
+        province_type = '四类', '4',
+        province_type = '五类', '5',
+        province_type = '六类', '6', '7'))       as orderFirst,
+        secondary_cover_scene                              as dataGranularitySecond,
+        concat('1', secondary_cover_scene)                 as orderSecond,
+        ''                                                 as dataGranularityThird,
+        ''                                                 as orderThird,
+        count(1)                                           as siteNum,
+        count(if(built_state == '10', 1, null)) as newStockSiteNum,
+        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        any(scoring_threshold)                  as newStockScoringThreshold,
+        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
+        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
+        count(if(built_state == '11', 1, null)) as newNewSiteNum,
+        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        any(scoring_threshold)                  as newNewScoringThreshold,
+        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
+        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        where event_id = #{params.raw.id}
+        group by province_type, secondary_cover_scene
+        union all
+        select
+        province_type                                      as dataGranularityFirst,
+        concat('2', multiIf(
+        province_type = '一类', '1',
+        province_type = '二类', '2',
+        province_type = '三类', '3',
+        province_type = '四类', '4',
+        province_type = '五类', '5',
+        province_type = '六类', '6', '7'))       as orderFirst,
+        province_name                                      as dataGranularitySecond,
+        concat('2', any(toString(province_order)))         as orderSecond,
+        ''                                                 as dataGranularityThird,
+        ''                                                 as orderThird,
+        count(1)                                           as siteNum,
+        count(if(built_state == '10', 1, null)) as newStockSiteNum,
+        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        any(scoring_threshold)                  as newStockScoringThreshold,
+        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
+        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
+        count(if(built_state == '11', 1, null)) as newNewSiteNum,
+        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        any(scoring_threshold)                  as newNewScoringThreshold,
+        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
+        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        where event_id = #{params.raw.id}
+        group by province_type, province_name
+        union all
+        select
+        province_type                                      as dataGranularityFirst,
+        concat('2', multiIf(
+        province_type = '一类', '1',
+        province_type = '二类', '2',
+        province_type = '三类', '3',
+        province_type = '四类', '4',
+        province_type = '五类', '5',
+        province_type = '六类', '6', '7'))       as orderFirst,
+        province_name                                      as dataGranularitySecond,
+        concat('2', any(toString(province_order)))         as orderSecond,
+        secondary_cover_scene                              as dataGranularityThird,
+        concat('1', secondary_cover_scene)                 as orderThird,
+        count(1)                                           as siteNum,
+        count(if(built_state == '10', 1, null)) as newStockSiteNum,
+        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        any(scoring_threshold)                  as newStockScoringThreshold,
+        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
+        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
+        count(if(built_state == '11', 1, null)) as newNewSiteNum,
+        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        any(scoring_threshold)                  as newNewScoringThreshold,
+        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
+        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        where event_id = #{params.raw.id}
+        group by province_type, province_name, secondary_cover_scene
+        ) a1
+        order by a1.orderFirst, a1.orderSecond, a1.orderThird
     </select>
 </mapper>
