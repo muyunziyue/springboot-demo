@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="">
+        select a1.goodsCode,
+        a1.goodsName,
+        a1.productSpec,
+        a1.planReserveQty,
+        a1.reserveQty,
+        a1.workingCapital,
+        a1.reserveRate,
+        a1.manufactureCd,
+        a1.manufactureName,
+        a1.approvalNumber,
+        a1.productForm,
+        a1.productSpec,
+        a2.init_storage_pack_qty - a1.reserveQty as storagePackQty
+        from (
+        select goods_code                                               as goodsCode,
+        any(goods_name)                                          as goodsName,
+        any(product_spec)                                        as productSpec,
+        sum(plan_reserve_qty)                                    as planReserveQty,
+        sum(reserve_qty)                                         as reserveQty,
+        sum(working_capital)                                     as workingCapital,
+        round(intDivOrZero(reserveQty, planReserveQty) * 100, 2) as reserveRate,
+        any(manufacture_cd)                                      as manufactureCd,
+        any(manufacture_name)                                    as manufactureName,
+        any(approval_number)                                     as approvalNumber,
+        any(product_form)                                        as productForm,
+        any(product_spec)                                        as productSpec
+        from dws.dws_reserve_org_goods_type_month
+        where snap_month = toString(toYYYYMM(subtractMonths(now(), 1)))
+        and reserves_type = #{reservesType}
+        <if test="goodsCode != null and goodsCode != ''">
+            and goods_code = #{goodsCode}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name = #{goodsName}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            and org_province_code = #{provinceCode}
+        </if>
+        group by goods_code
+        ) a1
+        global left join(
+        select goods_code,
+        intDivOrZero(sum(storage_pack_qty), length(arrayDistinct(flatten(groupUniqArray(storage_day_list))))) as init_storage_pack_qty
+        from dws.dws_market_storage_org_goods_month
+        where year_month = toString(toYYYYMM(subtractMonths(now(), 1)))
+        <if test="goodsCode != null and goodsCode != ''">
+            and goods_code = #{goodsCode}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name = #{goodsName}
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            and org_province_code = #{provinceCode}
+        </if>
+        group by goods_code
+        ) a2 on a1.goodsCode = a2.goods_code
+    </select>
+</mapper>
