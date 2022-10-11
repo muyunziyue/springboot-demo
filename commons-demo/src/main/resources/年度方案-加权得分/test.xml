@@ -2,198 +2,473 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.test.Test">
     <insert id="test">
-        select
-        indexOf(cast(
-        <choose>
-            <when test="params.raw.builtStateNewStock ==null ">
-                []
-            </when>
-            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewStock.weightPool"
-                         item="item" separator="," open="[" close="]">
-                    #{item.indicatorName}
-                </foreach>
-            </when>
-            <otherwise>
-                []
-            </otherwise>
-        </choose>
-        as Array(String)), a1.indicator_name) as new_stock_weight_name_index,
-        cast(
-        <choose>
-            <when test="params.raw.builtStateNewStock ==null ">
-                []
-            </when>
-            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewStock.weightPool"
-                         item="item" separator="," open="[" close="]">
-                    #{item.indicatorWeightRatio}
-                </foreach>
-            </when>
-            <otherwise>
-                []
-            </otherwise>
-        </choose>
-        as Array(Decimal64(5))) as new_stock_weight_weight_array,
-        indexOf(cast(
-        <choose>
-            <when test="params.raw.builtStateNewNew ==null ">
-                []
-            </when>
-            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewNew.weightPool"
-                         item="item" separator="," open="[" close="]">
-                    #{item.indicatorName}
-                </foreach>
-            </when>
-            <otherwise>
-                []
-            </otherwise>
-        </choose>
-        as Array(String)), a1.indicator_name) as new_new_weight_name_index,
-        cast(
-        <choose>
-            <when test="params.raw.builtStateNewNew ==null ">
-                []
-            </when>
-            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewNew.weightPool"
-                         item="item" separator="," open="[" close="]">
-                    #{item.indicatorWeightRatio}
-                </foreach>
-            </when>
-            <otherwise>
-                []
-            </otherwise>
-        </choose>
-        as Array(Decimal64(5))) as new_new_weight_weight_array,
-        indexOf(cast(
-        <choose>
-            <when test="params.raw.builtStateNewStock ==null ">
-                []
-            </when>
-            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool"
-                         item="item" separator="," open="[" close="]">
-                    #{item.indicatorName}
-                </foreach>
-            </when>
-            <otherwise>
-                []
-            </otherwise>
-        </choose>
-        as Array(String)), a1.indicator_name) as new_stock_one_name_index,
-        cast(
-        <choose>
-            <when test="params.raw.builtStateNewStock ==null ">
-                [[]]
-            </when>
-            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool"
-                         item="item" separator="," open="[" close="]">
-                    <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
-                        #{item}
-                    </foreach>
-                </foreach>
-            </when>
-            <otherwise>
-                [[]]
-            </otherwise>
-        </choose>
-        as Array(Array(Int32)))                     as new_stock_one_level_array,
-        indexOf(cast(
-        <choose>
-            <when test="params.raw.builtStateNewNew ==null ">
-                []
-            </when>
-            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool"
-                         item="item" separator="," open="[" close="]">
-                    #{item.indicatorName}
-                </foreach>
-            </when>
-            <otherwise>
-                []
-            </otherwise>
-        </choose>
-        as Array(String)), a1.indicator_name) as new_new_one_name_index,
-        cast(
-        <choose>
-            <when test="params.raw.builtStateNewNew ==null ">
-                [[]]
-            </when>
-            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
-                <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool"
-                         item="item" separator="," open="[" close="]">
-                    <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
-                        #{item}
-                    </foreach>
-                </foreach>
-            </when>
-            <otherwise>
-                [[]]
-            </otherwise>
-        </choose>
-        as Array(Array(Int32)))                     as new_new_one_level_array,
-        has(multiIf(and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
-        and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as indicator_one_vote_boolean,
-
-        toDecimal64(multiIf(and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
-        and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
-        multiIf(and(a1.built_state = '10',new_stock_weight_name_index),1, and(a1.built_state = '11',new_new_weight_name_index),1,0) as is_indicator_weighted,
-        multiIf(and(a1.built_state = '10',new_stock_one_name_index),1, and(a1.built_state = '11', new_new_one_name_index),1,0) as is_indicator_one_vote
-        from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
-        where a1.event_id global in (''
-        <choose>
-            <when test="params.raw.builtStateNewStock == null">
-
-            </when>
-            <when test="params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
-                ,
-                <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool" item="item" separator="," close="" open="">
-                    #{item.indicatorGradeId}
-                </foreach>
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewStock == null">
-            </when>
-            <when test="params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
-                ,
-                <foreach collection="params.raw.builtStateNewStock.weightPool" item="item" separator="," close="" open="">
-                    #{item.indicatorGradeId}
-                </foreach>
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewNew == null">
-            </when>
-            <when test="params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
-                ,
-                <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool" item="item" separator="," close="" open="">
-                    #{item.indicatorGradeId}
-                </foreach>
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewNew == null">
-
-            </when>
-            <when test="params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
-                ,
-                <foreach collection="params.raw.builtStateNewNew.weightPool" item="item" separator="," close="" open="">
-                    #{item.indicatorGradeId}
-                </foreach>
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
+        INSERT INTO cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info
+        (
+        province,
+        province_name,
+        province_abbreviation,
+        province_type,
+        province_order,
+        citys,
+        citys_name,
+        citys_abbreviation,
+        citys_type,
+        citys_order,
+        citys_distribution,
+        event_id,
+        site_type,
+        data_sampling_time,
+        area_type,
+        site_name,
+        site_location,
+        longitude,
+        latitude,
+        cover_area,
+        cover_scene,
+        secondary_cover_scene,
+        other_cover_scene,
+        related_room_location_4g,
+        built_state_4g,
+        base_station_id_4g,
+        e_cgi_set_4g,
+        built_way_4g,
+        indoor_building_site_2g_900m_distri_sys_4g,
+        indoor_building_site_cell_distri_sys_4g,
+        indoor_distri_pico_cover_area_4g,
+        indoor_integration_pico_cover_area_4g,
+        indoor_trad_single_das_cover_area_4g,
+        indoor_trad_double_das_cover_area_4g,
+        indoor_fiber_distri_sys_cover_area_4g,
+        indoor_freq_conver_distri_sys_cover_area_4g,
+        indoor_ext_pico_cover_area_4g,
+        indoor_inter_building_cover_area_4g,
+        indoor_bs_num_4g,
+        indoor_p_cell_num_4g,
+        frequency_4g,
+        freq_num_4g,
+        indoor_building_site_ruu_num_4g,
+        indoor_building_site_pruu_num_4g,
+        indoor_building_site_ext_pico_remote_unit_num_4g,
+        related_room_location_5g,
+        distri_sta_5g,
+        built_state_5g,
+        base_station_id_5g,
+        e_cgi_collection_5g,
+        built_way_5g,
+        indoor_distri_pico_cover_area_2t_5g,
+        indoor_distri_pico_cover_area_4t_5g,
+        indoor_integration_pico_cover_area_5g,
+        indoor_trad_single_das_cover_area_5g,
+        indoor_trad_double_das_cover_area_5g,
+        indoor_fiber_distri_sys_cover_area_5g,
+        indoor_freq_conver_distri_sys_cover_area_5g,
+        indoor_ext_pico_cover_area_5g,
+        indoor_inter_building_cover_area_5g,
+        indoor_bs_num_5g,
+        indoor_p_cell_num_5g,
+        frequency_point_5g,
+        freq_num_5g,
+        indoor_building_site_rru_num_5g,
+        indoor_building_site_pruu_num_5g,
+        indoor_building_site_ext_pico_remote_unit_num_5g,
+        rival,
+        rival_common_site,
+        rival_pre,
+        spe_gua,
+        spe_gua_type,
+        vert_ind_dem,
+        perday_flow_prediction_5g,
+        built_state,
+        indicator3_item3,
+        indicator3_item7,
+        indicator_name,
+        indicator_algorithm_type,
+        indicator_item_name,
+        indicator_level,
+        indicator_value,
+        indicator_score,
+        dwd_site_for_annual_plan_indoor_info_id,
+        dwd_site_for_annual_plan_indoor_info_event_id
         )
+
+        SELECT
+        province,
+        province_name,
+        province_abbreviation,
+        province_type,
+        province_order,
+        citys,
+        citys_name,
+        citys_abbreviation,
+        citys_type,
+        citys_order,
+        citys_distribution,
+        '${params.eventId}'AS event_id,
+        site_type,
+        data_sampling_time,
+        area_type,
+        site_name,
+        site_location,
+        longitude,
+        latitude,
+        cover_area,
+        cover_scene,
+        secondary_cover_scene,
+        other_cover_scene,
+        related_room_location_4g,
+        built_state_4g,
+        base_station_id_4g,
+        e_cgi_set_4g,
+        built_way_4g,
+        indoor_building_site_2g_900m_distri_sys_4g,
+        indoor_building_site_cell_distri_sys_4g,
+        indoor_distri_pico_cover_area_4g,
+        indoor_integration_pico_cover_area_4g,
+        indoor_trad_single_das_cover_area_4g,
+        indoor_trad_double_das_cover_area_4g,
+        indoor_fiber_distri_sys_cover_area_4g,
+        indoor_freq_conver_distri_sys_cover_area_4g,
+        indoor_ext_pico_cover_area_4g,
+        indoor_inter_building_cover_area_4g,
+        indoor_bs_num_4g,
+        indoor_p_cell_num_4g,
+        frequency_4g,
+        freq_num_4g,
+        indoor_building_site_ruu_num_4g,
+        indoor_building_site_pruu_num_4g,
+        indoor_building_site_ext_pico_remote_unit_num_4g,
+        related_room_location_5g,
+        distri_sta_5g,
+        built_state_5g,
+        base_station_id_5g,
+        e_cgi_collection_5g,
+        built_way_5g,
+        indoor_distri_pico_cover_area_2t_5g,
+        indoor_distri_pico_cover_area_4t_5g,
+        indoor_integration_pico_cover_area_5g,
+        indoor_trad_single_das_cover_area_5g,
+        indoor_trad_double_das_cover_area_5g,
+        indoor_fiber_distri_sys_cover_area_5g,
+        indoor_freq_conver_distri_sys_cover_area_5g,
+        indoor_ext_pico_cover_area_5g,
+        indoor_inter_building_cover_area_5g,
+        indoor_bs_num_5g,
+        indoor_p_cell_num_5g,
+        frequency_point_5g,
+        freq_num_5g,
+        indoor_building_site_rru_num_5g,
+        indoor_building_site_pruu_num_5g,
+        indoor_building_site_ext_pico_remote_unit_num_5g,
+        rival,
+        rival_common_site,
+        rival_pre,
+        spe_gua,
+        spe_gua_type,
+        vert_ind_dem,
+        perday_flow_prediction_5g,
+        built_state,
+        indicator3_item3,
+        indicator3_item7,
+        --指标信息
+        ifNull(indicator_name,'') AS indicator_name,
+        ifNull(indicator_algorithm_type,'') AS indicator_algorithm_type,
+        ifNull(indicator_item_name,'') AS indicator_item_name,
+        ifNull(indicator_level,0) AS indicator_level,
+        ifNull(toString(mid_indicator_value),'') AS indicator_value,
+        ifNull(indicator_score,0.0) AS indicator_score,
+        dwd_site_for_annual_plan_indoor_info_id,
+        dwd_site_for_annual_plan_indoor_info_event_id
+        FROM (
+
+
+
+        <!-- 基础信息(站址信息+扩展信息) -->
+        WITH site_info AS
+        (SELECT
+        <!-- 算法3 用到的百分位指标 -->
+        ROUND(toInt64(indicator_row_num*100/count_indicator_value)) AS indicator_quantile_index,
+        * FROM
+        (SELECT
+        id AS dwd_site_for_annual_plan_indoor_info_id,
+        event_id AS dwd_site_for_annual_plan_indoor_info_event_id,
+        *,
+        <!-- 指标名称 -->
+        #{params.raw.indicatorName} AS indicator_name,
+        <!-- 指标项名称 -->
+        multiIf(
+        <if test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and params.raw.builtStateNewStock.thresholdList!=null and params.raw.builtStateNewStock.thresholdList.size()!=0">
+            <foreach item="item" index="index" collection="params['raw']['builtStateNewStock']['thresholdList']">
+                built_state='10'
+                <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                    AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                </if>
+
+                ,#{item.indicatorItem},
+            </foreach>
+        </if>
+        <if test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew != ''  and params.raw.builtStateNewNew.thresholdList!=null      and params.raw.builtStateNewNew.thresholdList.size()!=0">
+            <foreach item="item" index="index" collection="params['raw']['builtStateNewNew']['thresholdList']">
+                built_state='11'
+                <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                    AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                </if>
+
+                ,#{item.indicatorItem},
+            </foreach>
+        </if>
+        NULL) AS indicator_item_name,
+        <!-- 指标算法 -->
+        multiIf(
+        <if test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and params.raw.builtStateNewStock.algorithmType!=null and params.raw.builtStateNewStock.algorithmType!=''">
+            built_state='10' and indicator_item_name is NOT NULL,#{params.raw.builtStateNewStock.algorithmType},
+        </if>
+        <if test="params.raw.builtStateNewNew   != null and params.raw.builtStateNewNew   != '' and params.raw.builtStateNewNew.algorithmType!=null   and params.raw.builtStateNewNew.algorithmType!=''">
+            built_state='11'and indicator_item_name is NOT NULL,#{params.raw.builtStateNewNew.algorithmType},
+        </if>
+        NULL) AS indicator_algorithm_type,
+        <!--待建存量指标值 -->
+        multiIf(
+        <choose>
+            <!--政策保障，场景价值，竞对压力 指标 -->
+            <when test="params.raw.indicatorName == 'scene_value' or params.raw.indicatorName == 'rival_pre' or params.raw.indicatorName == 'policy_guarantee'">
+                <if test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and params.raw.builtStateNewStock.thresholdList!=null and params.raw.builtStateNewStock.thresholdList.size()!=0">
+                    built_state='10',${params.raw.builtStateNewStock.thresholdList[0].indicatorItem},
+                </if>
+                <if test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew != '' and params.raw.builtStateNewNew.thresholdList!=null and params.raw.builtStateNewNew.thresholdList.size()!=0">
+                    built_state='11',${params.raw.builtStateNewNew.thresholdList[0].indicatorItem},
+                </if>
+            </when>
+            <!-- 指标值:算法1,4用到的指标值 -->
+            <when test="params.raw.indicatorName == '5g_to_4g' or params.raw.indicatorName == 'flow_density' or params.raw.indicatorName == '5g_terminal_penetration' or params.raw.indicatorName == 'network_complaints'">
+                <if test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and params.raw.builtStateNewStock.thresholdList!=null and params.raw.builtStateNewStock.thresholdList.size()!=0">
+                    <foreach item="item" index="index" collection="params['raw']['builtStateNewStock']['thresholdList']">
+                        built_state='10' AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene} ,abs(${item.indicatorItem}),
+                    </foreach>
+                </if>
+                <if test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew != '' and params.raw.builtStateNewNew.thresholdList!=null  and params.raw.builtStateNewNew.thresholdList.size()!=0">
+                    <foreach item="item" index="index" collection="params['raw']['builtStateNewNew']['thresholdList']">
+                        built_state='11' AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene} ,${item.indicatorItem},
+                    </foreach>
+                </if>
+            </when>
+
+        </choose>
+        NULL)
+        AS mid_indicator_value,
+        --平均值/标准差-指标分析类----算法2用到平均值
+        <choose>
+            <when test="params.raw.indicatorName == '5g_to_4g' or params.raw.indicatorName == 'flow_density' or params.raw.indicatorName == '5g_terminal_penetration' or params.raw.indicatorName == 'network_complaints'">
+                --平均数
+                avg(mid_indicator_value) over w AS avg_indicator_value,
+                --标准方差
+                stddevPop(mid_indicator_value) over w AS std_indicator_value,
+                --总数
+                count(1) over w AS count_indicator_value,
+                --位置
+                row_number() over (PARTITION BY built_state,province,secondary_cover_scene ORDER BY mid_indicator_value DESC) AS indicator_row_num,
+            </when>
+            <otherwise>
+                NULL AS avg_indicator_value,
+                NULL AS std_indicator_value,
+                NULL AS count_indicator_value,
+                NULL AS indicator_row_num,
+            </otherwise>
+        </choose>
+        '' AS end_field
+        FROM
+        cmdi_pvopp.dwd_site_for_annual_plan_indoor_info
+        WHERE
+        event_id GLOBAL IN #{params.raw.sitePlanId}
+        AND site_type = #{params.raw.siteType}
+        AND citys GLOBAL IN #{params.raw.citys}
+        --业务参数-建设方式筛选
+        <choose>
+            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and  params.raw.builtStateNewStock.thresholdList.size()!=0  and  params.raw.builtStateNewNew != null and params.raw.builtStateNewNew != ''   and params.raw.builtStateNewNew.thresholdList.size()!=0">
+                AND built_state GLOBAL IN ['10','11']
+            </when>
+            <when test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and  params.raw.builtStateNewStock.thresholdList.size()!=0">
+                AND built_state ='10'
+            </when>
+            <when test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew != ''   and params.raw.builtStateNewNew.thresholdList.size()!=0">
+                AND built_state ='11'
+            </when>
+            <otherwise>
+                AND built_state IS NULL
+            </otherwise>
+        </choose>
+        window w as (PARTITION by built_state,province,secondary_cover_scene)
+        SETTINGS allow_experimental_window_functions = 1))
+
+
+
+        <!-- 分级计算 -->
+        SELECT
+        *,
+        <!-- 价值分级 -->
+        multiIf(
+        <!-- 待建存量 -->
+        <if test="params.raw.builtStateNewStock != null and params.raw.builtStateNewStock != '' and params.raw.builtStateNewStock.thresholdList!=null and params.raw.builtStateNewStock.thresholdList.size()!=0">
+            <foreach item="item" index="index" collection="params['raw']['builtStateNewStock']['thresholdList']">
+                <choose>
+                    <!-- 算法1-自定义绝对值法 -->
+                    <when test="params.raw.builtStateNewStock.algorithmType=='1'.toString() and item['logicalRelationship'] =='range'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='10'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            and mid_indicator_value >= toDecimal64(${item.value[levelIndex].substring(1,item.value[levelIndex].length()- 1).split(',')[0]},2)
+                            <if test="item['value'][levelIndex].substring(1, item['value'][levelIndex].length() - 1).split(',')[1]!='+'.toString()">
+                                and mid_indicator_value <![CDATA[ <]]>
+                                toDecimal64(${item.value[levelIndex].substring(1,item.value[levelIndex].length()- 1).split(',')[1]},2)
+                            </if>
+                            ,#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法2-自定义平均倍数法 -->
+                    <when test="params.raw.builtStateNewStock.algorithmType=='2'.toString() and item['logicalRelationship'] =='range'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='10'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            and mid_indicator_value >= multiply(toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[0]},2),toDecimal64(avg_indicator_value, 2))
+                            <if test="item['value'][levelIndex].substring(1, item['value'][levelIndex].length() - 1).split(',')[1]!='+'.toString()">
+                                and mid_indicator_value <![CDATA[ <]]>
+                                multiply(toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[1]},2),toDecimal64(avg_indicator_value, 2))
+                            </if>
+                            ,#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法3-归一法 -->
+                    <when test="params.raw.builtStateNewStock.algorithmType=='3'.toString() and item['logicalRelationship'] =='range'">
+                        <!-- 0 -->
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='10'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            <!-- 指标值筛选 -->
+                            and indicator_quantile_index >= toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[0]},2)
+                            <if test="item['value'][levelIndex].substring(1, item['value'][levelIndex].length() - 1).split(',')[1]!='+'.toString()">
+                                and indicator_quantile_index <![CDATA[ <]]>
+                                toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[1]},2)
+                            </if>
+                            ,#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法4-匹配法-eq -->
+                    <when test="params.raw.builtStateNewStock.algorithmType=='4'.toString() and item['logicalRelationship'] == 'eq'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='10'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            and mid_indicator_value = #{item.value[${levelIndex}]},#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法4-匹配法-in -->
+                    <when test="params.raw.builtStateNewStock.algorithmType=='4'.toString() and item['logicalRelationship'] == 'in'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            <if test="levelItem!=null and levelItem!='' and item['value'][levelIndex].size()!=0">
+                                built_state ='10'
+                                <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                    AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                                </if>
+                                and mid_indicator_value GLOBAL IN #{item.value[${levelIndex}]},#{levelItem},
+                            </if>
+                        </foreach>
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        <!-- 待建新建 -->
+        <if test="params.raw.builtStateNewNew != null and params.raw.builtStateNewNew != '' and params.raw.builtStateNewNew.thresholdList!=null and params.raw.builtStateNewNew.thresholdList.size()!=0">
+            <foreach item="item" index="index" collection="params['raw']['builtStateNewNew']['thresholdList']">
+                <choose>
+                    <!-- 算法1-自定义绝对值法 -->
+                    <when test="params.raw.builtStateNewNew.algorithmType=='1'.toString() and item['logicalRelationship'] =='range'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='11'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            and mid_indicator_value >= toDecimal64(${item.value[levelIndex].substring(1,item.value[levelIndex].length()- 1).split(',')[0]},2)
+                            <if test="item['value'][levelIndex].substring(1, item['value'][levelIndex].length() - 1).split(',')[1]!='+'.toString()">
+                                and mid_indicator_value <![CDATA[ <]]>
+                                toDecimal64(${item.value[levelIndex].substring(1,item.value[levelIndex].length()- 1).split(',')[1]},2)
+                            </if>
+                            ,#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法2-自定义平均倍数法 -->
+                    <when test="params.raw.builtStateNewNew.algorithmType=='2'.toString() and item['logicalRelationship'] =='range'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='11'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            and mid_indicator_value >= multiply(toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[0]},2),toDecimal64(avg_indicator_value, 2))
+                            <if test="item['value'][levelIndex].substring(1, item['value'][levelIndex].length() - 1).split(',')[1]!='+'.toString()">
+                                and mid_indicator_value <![CDATA[ <]]>
+                                multiply(toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[1]},2),toDecimal64(avg_indicator_value, 2))
+                            </if>
+                            ,#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法3-归一法 -->
+                    <when test="params.raw.builtStateNewNew.algorithmType=='3'.toString() and item['logicalRelationship'] =='range'">
+                        <!-- 0 -->
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='11'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            <!-- 指标值筛选 -->
+                            and indicator_quantile_index >= toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[0]},2)
+                            <if test="item['value'][levelIndex].substring(1, item['value'][levelIndex].length() - 1).split(',')[1]!='+'.toString()">
+                                and indicator_quantile_index <![CDATA[ <]]>
+                                toDecimal64(${item["value"][levelIndex].substring(1, item["value"][levelIndex].length() - 1).split(',')[1]},2)
+                            </if>
+                            ,#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法4-匹配法-eq -->
+                    <when test="params.raw.builtStateNewNew.algorithmType=='4'.toString() and item['logicalRelationship'] == 'eq'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            built_state ='11'
+                            <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                            </if>
+                            and mid_indicator_value = #{item.value[${levelIndex}]},#{levelItem},
+                        </foreach>
+                    </when>
+                    <!-- 算法4-匹配法-in -->
+                    <when test="params.raw.builtStateNewNew.algorithmType=='4'.toString() and item['logicalRelationship'] == 'in'">
+                        <foreach item="levelItem" index="levelIndex" collection="item['level']">
+                            <if test="levelItem!=null and levelItem!='' and item['value'][levelIndex].size()!=0">
+                                built_state ='11'
+                                <if test="item['province']!= null and item['secondaryCoverScene']!=null and  item['province']!= '' and item['secondaryCoverScene']!=''">
+                                    AND province=#{item.province} AND secondary_cover_scene = #{item.secondaryCoverScene}
+                                </if>
+                                and mid_indicator_value GLOBAL IN #{item.value[${levelIndex}]},#{levelItem},
+                            </if>
+                        </foreach>
+                    </when>
+                </choose>
+            </foreach>
+        </if>
+        1=1,0,0) AS mid_indicator_level,
+        <!-- 等级 -->
+        multiIf(mid_indicator_level is not NULL,toInt64(mid_indicator_level),0) as indicator_level,
+        <!-- 得分 -->
+        multiIf(
+        <!-- 指标分析类 -->
+        indicator_level!=0 and indicator_name in ['5g_to_4g','flow_density','5g_terminal_penetration','network_complaints'],100/5 * (5-indicator_level)+ abs(1/(1+EXP(-(1/(1+EXP(-toFloat64((toFloat64(mid_indicator_value)-toFloat64(avg_indicator_value)))/toFloat64(std_indicator_value!=0?std_indicator_value:1)))-0.5)*20)))*20,
+        <!-- 市场保障类 -->
+        indicator_level!=0,100/5 * (5-indicator_level+1),
+        <!-- 其他 -->
+        0) as indicator_score
+        FROM site_info)
     </insert>
 </mapper>

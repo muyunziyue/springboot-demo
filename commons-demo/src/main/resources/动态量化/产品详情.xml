@@ -14,7 +14,7 @@
         a1.approvalNumber,
         a1.productForm,
         a1.productSpec,
-        a2.init_storage_pack_qty - a1.reserveQty as storagePackQty
+        a2.init_storage_pack_qty - a1.reserveQty as medicineStorageNum
         from (
         select goods_code                                               as goodsCode,
         any(goods_name)                                          as goodsName,
