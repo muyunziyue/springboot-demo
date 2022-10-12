@@ -16,7 +16,7 @@ select a1.province,
 from(
     select province,
            any(province_name) as provinceName,
-           multiIf(built_state == '10', '共址站',built_state == '11', '新址站', '') as siteType,
+           multiIf(built_state == '10', '待建存量站',built_state == '11', '待建新建站', '') as siteType,
            count(1) as siteNum,
            count(if(is_high_value_by_score = '1', 1, null)) as passAuditSiteNum,
            intDivOrZero(toDecimal64(passAuditSiteNum, 4), siteNum) * 100 as passAuditRatio,
@@ -25,7 +25,7 @@ from(
            count(if(is_high_value_by_manual_work = '1', 1, null)) as adjustedSiteNum,
            adjustedSiteNum - passAuditSiteNum as contrastByPassAuditSiteNum,
            any(manual_work_reason) as adjustReason,
-           multiIf(siteType == '全量站', 1, siteType == '共址站', 2, siteType == '新址站', 3,4) as orderSiteType,
+           multiIf(siteType == '全量站', 1, siteType == '待建存量站', 2, siteType == '待建新建站', 3,4) as orderSiteType,
            any(province_order) as orderProvince
     from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
     where event_id = #{params.raw.id}
@@ -42,7 +42,7 @@ from(
            count(if(is_high_value_by_manual_work = '1', 1, null)) as adjustedSiteNum,
            adjustedSiteNum - passAuditSiteNum as contrastByPassAuditSiteNum,
            any(manual_work_reason) as adjustReason,
-           multiIf(siteType == '全量站', 1, siteType == '共址站', 2, siteType == '新址站', 3,4) as orderSiteType,
+           multiIf(siteType == '全量站', 1, siteType == '待建存量站', 2, siteType == '待建新建站', 3,4) as orderSiteType,
            any(province_order) as orderProvince
     from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
     where event_id = #{params.raw.id}

@@ -33,7 +33,7 @@
                a1.contrastByPassAuditSiteNum,
                arrayStringConcat(a1.adjustReason, ';') as adjustReason
         from(
-                select multiIf(built_state == '10', '共址站',built_state == '11', '新址站', '') as siteType,
+                select multiIf(built_state == '10', '待建存量站',built_state == '11', '待建新建站', '') as siteType,
                        count(1) as siteNum,
                        count(if(is_high_value_by_score = '1', 1, null)) as passAuditSiteNum,
                        intDivOrZero(toDecimal64(passAuditSiteNum, 4), siteNum) * 100 as passAuditRatio,
@@ -42,7 +42,7 @@
                        count(if(is_high_value_by_manual_work = '1', 1, null)) as adjustedSiteNum,
                        adjustedSiteNum - passAuditSiteNum as contrastByPassAuditSiteNum,
                        groupUniqArray(if(manual_work_reason != '', concat(province_name,':',manual_work_reason), null)) as adjustReason,
-                       multiIf(siteType == '全量站', 1, siteType == '共址站', 2, siteType == '新址站', 3,4) orderColumn
+                       multiIf(siteType == '全量站', 1, siteType == '待建存量站', 2, siteType == '待建新建站', 3,4) orderColumn
                 from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
                 where event_id = #{params.raw.id}
                 group by built_state
@@ -56,14 +56,14 @@
                        count(if(is_high_value_by_manual_work = '1', 1, null)) as adjustedSiteNum,
                        adjustedSiteNum - passAuditSiteNum as contrastByPassAuditSiteNum,
                        groupUniqArray(if(manual_work_reason != '', concat(province_name,':',manual_work_reason), null)) as adjustReason,
-                       multiIf(siteType == '全量站', 1, siteType == '共址站', 2, siteType == '新址站', 3,4) orderColumn
+                       multiIf(siteType == '全量站', 1, siteType == '待建存量站', 2, siteType == '待建新建站', 3,4) orderColumn
                 from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
                 where event_id = #{params.raw.id}
             ) a1
             global right join (
-    select '共址站' as siteType, 2 as orderColumn union all
+    select '待建存量站' as siteType, 2 as orderColumn union all
     select '全量站' as siteType ,1 as orderColumn union all
-    select '新址站' as siteType, 3 as orderColumn
+    select '待建新建站' as siteType, 3 as orderColumn
     ) a2
         on a1.siteType = a2.siteType
         order by a2.orderColumn
