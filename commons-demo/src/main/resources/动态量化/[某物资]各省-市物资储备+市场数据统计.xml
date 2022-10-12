@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="">
+        select b1.regionCode,
+        b1.regionName,
+        b1.planReserveQty,
+        b1.reserveQty,
+        b1.workingCapital,
+        b1.reserveRate,
+        b1.orgNum,
+        b1.marketStorageQty,
+        b1.marketStorageQtyMom,
+        b1.avgDailySale,
+        b2.supplyDays
+        from(
+        select
+        <choose>
+            <when test="provinceCode != null and provinceCode != ''">
+                org_city_code as regionCode,
+                org_city_name as regionName,
+            </when>
+            <otherwise>
+                org_province_code as regionCode,
+                org_province_name as regionName,
+            </otherwise>
+        </choose>
+        sum(plan_reserve_qty) as planReserveQty,
+        sum(reserve_qty) as reserveQty,
+        sum(working_capital) as workingCapital,
+        round(intDivOrZero(reserveQty, planReserveQty) * 100) as reserveRate,
+        sum(org_num) as orgNum,
+        intDivOrZero(sum(storage_pack_qty), length(arrayDistinct(flatten(groupUniqArray(storage_day_list))))) -
+        reserveQty as marketStorageQty,
+        intDivOrZero(sum(storage_pack_qty_last_month),
+        length(arrayDistinct(flatten(groupUniqArray(storage_day_list_last_month))))) -
+        reserveQty as marketStorageQty_last,
+        round(intDivOrZero((marketStorageQty - marketStorageQty_last), marketStorageQty_last) * 100,
+        2) as marketStorageQtyMom,
+        intDivOrZero(sum(sell_qty),
+        length(arrayDistinct(flatten(groupUniqArray(sell_day_list))))) as avgDailySale
+        from dws.dws_reserve_goods_type_city
+        where reserves_type = #{reservesType}
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name = #{goodsName}
+        </if>
+        <choose>
+            <when test="provinceCode != null and provinceCode != ''">
+                and org_province_code = #{provinceCode}
+                group by org_city_code,
+                org_city_name
+            </when>
+            <otherwise>
+                group by org_province_code,
+                org_province_name
+            </otherwise>
+        </choose>
+        ) b1
+        global left join(
+        select
+        min(a1.available_day) as supplyDays,
+        a1.region_code as regionCode,
+        any(a1.region_name) as regionName
+        from ods.ods_approval_number_shortage a1
+        global join ods.ods_same_variety_definition a2
+        on a1.general_product_name = a2.same_variety_definition and a1.product_form = a2.form_merge_name
+        where a1.is_whole = '0'
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name = #{goodsName}
+        </if>
+        group by a1.region_code
+        ) b2 on b1.regionCode = b2.regionCode
+    </select>
+</mapper>

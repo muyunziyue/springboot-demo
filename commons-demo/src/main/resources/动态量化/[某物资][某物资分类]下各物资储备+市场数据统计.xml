@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="">
+        select b1.reserveGoodsType as reserveGoodsType,
+        b1.goodsName as goodsName,
+        b1.planReserveQty as planReserveQty,
+        b1.reserveQty as reserveQty,
+        b1.workingCapital as workingCapital,
+        b1.reserveRate as reserveRate,
+        b1.marketStorageQty as marketStorageQty,
+        b1.avgDailySale as avgDailySale,
+        b1.orgNum as orgNum,
+        b1.goodsName as goodsName,
+        b2.supplyDays as supplyDays
+        from (
+        select
+        any(reserve_goods_type) as reserveGoodsType,
+        goods_name as goodsName,
+        sum(plan_reserve_qty) as planReserveQty,
+        sum(reserve_qty) as reserveQty,
+        sum(working_capital) as workingCapital,
+        round(intDivOrZero(reserveQty, planReserveQty) * 100, 2) as reserveRate,
+        intDivOrZero(sum(storage_pack_qty),length(arrayDistinct(flatten(groupUniqArray(storage_day_list))))) -
+        reserveQty as marketStorageQty,
+        intDivOrZero(sum(sell_qty), length(arrayDistinct(flatten(groupUniqArray(sell_day_list))))) as avgDailySale,
+        sum(org_num) as orgNum
+        from dws.dws_reserve_goods_type_province
+        where reserves_type = #{reservesType}
+        <if test="provinceCode != null and provinceCode != ''">
+            and org_province_code = #{provinceCode}
+        </if>
+        <if test="reserveGoodsType != null and reserveGoodsType != ''">
+            and reserve_goods_type = #{reserveGoodsType}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name = #{goodsName}
+        </if>
+        group by goods_name
+        ) b1
+        global left join(
+        select a2.general_product_name as goodsName,
+        min(a1.available_day) as supplyDays
+        from ods.ods_approval_number_shortage a1
+        global join ods.ods_same_variety_definition a2
+        on a1.general_product_name = a2.same_variety_definition and a1.product_form = a2.form_merge_name
+        where 1=1
+        <if test="provinceCode == null or provinceCode == ''">
+            and a1.is_whole = '1'
+        </if>
+        <if test="provinceCode != null and provinceCode != ''">
+            and a1.is_whole = '0' and region_code = #{provinceCode}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and a2.general_product_name = #{goodsName}
+        </if>
+        group by a2.general_product_name
+        ) b2 on b1.goodsName = b2.goodsName
+    </select>
+</mapper>
