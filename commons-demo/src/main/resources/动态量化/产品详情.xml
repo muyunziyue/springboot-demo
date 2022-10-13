@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.test.Test">
     <select id="">
-        select a1.goodsCode,
-        a1.goodsName,
-        a1.productSpec,
-        a1.planReserveQty,
-        a1.reserveQty,
-        a1.workingCapital,
-        a1.reserveRate,
-        a1.manufactureCd,
-        a1.manufactureName,
-        a1.approvalNumber,
-        a1.productForm,
-        a1.productSpec,
+        select a1.goodsCode as goodsCode,
+        a1.goodsName as goodsName,
+        a1.productSpec as productSpec,
+        a1.planReserveQty as planReserveQty,
+        a1.reserveQty as reserveQty,
+        a1.workingCapital as workingCapital,
+        a1.reserveRate as reserveRate,
+        a1.manufactureCd as manufactureCd,
+        a1.manufactureName as manufactureName,
+        a1.approvalNumber as approvalNumber,
+        a1.productForm as productForm,
+        a1.productSpec as productSpec,
         a2.init_storage_pack_qty - a1.reserveQty as medicineStorageNum
         from (
         select goods_code                                               as goodsCode,

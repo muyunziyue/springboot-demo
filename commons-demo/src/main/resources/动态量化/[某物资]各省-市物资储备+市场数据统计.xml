@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.test.Test">
     <select id="">
-        select b1.regionCode,
-        b1.regionName,
-        b1.planReserveQty,
-        b1.reserveQty,
-        b1.workingCapital,
-        b1.reserveRate,
-        b1.orgNum,
-        b1.marketStorageQty,
-        b1.marketStorageQtyMom,
-        b1.avgDailySale,
-        b2.supplyDays
+        select b1.regionCode as regionCode,
+        b1.regionName as regionName,
+        b1.planReserveQty as planReserveQty,
+        b1.reserveQty as reserveQty,
+        b1.workingCapital as workingCapital,
+        b1.reserveRate as reserveRate,
+        b1.orgNum as orgNum,
+        b1.marketStorageQty as marketStorageQty,
+        b1.marketStorageQtyMom as marketStorageQtyMom,
+        b1.avgDailySale as avgDailySale,
+        b2.supplyDays as supplyDays
         from(
         select
         <choose>
@@ -66,7 +66,7 @@
         on a1.general_product_name = a2.same_variety_definition and a1.product_form = a2.form_merge_name
         where a1.is_whole = '0'
         <if test="goodsName != null and goodsName != ''">
-            and goods_name = #{goodsName}
+            and a1.general_product_name = #{goodsName}
         </if>
         group by a1.region_code
         ) b2 on b1.regionCode = b2.regionCode

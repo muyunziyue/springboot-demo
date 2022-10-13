@@ -6,7 +6,7 @@
         substring(replace(a1.forecast_day, '-', ''), 1, 6) as yearMonth,
         a1.region_code as provinceCode,
         a1.region_name as provinceName,
-        ids as ids
+        a1.ids as ids
         from ods.ods_approval_number_shortage a1
         global join ods.ods_same_variety_definition a2
         on a1.general_product_name = a2.same_variety_definition and a1.product_form = a2.form_merge_name
@@ -35,7 +35,7 @@
             <when test="(startMonth != null and startMonth != '') and (endMonth != null and endMonth != '')">
                 and yearMonth >= #{startMonth}
                 and yearMonth &lt; #{endMonth}
-                order by a1.forecast_day desc
+                order by a1.forecast_day desc, a1.ids desc
                 limit 0, 1
                 by yearMonth, region_code, general_product_name
             </when>

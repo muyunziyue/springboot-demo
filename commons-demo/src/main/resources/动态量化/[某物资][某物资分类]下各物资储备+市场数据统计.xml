@@ -11,7 +11,6 @@
         b1.marketStorageQty as marketStorageQty,
         b1.avgDailySale as avgDailySale,
         b1.orgNum as orgNum,
-        b1.goodsName as goodsName,
         b2.supplyDays as supplyDays
         from (
         select
