@@ -40,7 +40,7 @@
                         </foreach>
                     </when>
                     <otherwise>
-                        1, is_high_value_by_score
+                        0, is_high_value_by_score
                     </otherwise>
                 </choose>
             </when>
@@ -80,7 +80,7 @@
                         </foreach>
                     </when>
                     <otherwise>
-                        1, is_high_value_by_score
+                        0, is_high_value_by_score
                     </otherwise>
                 </choose>
             </when>
@@ -123,7 +123,7 @@
                         </foreach>
                     </when>
                     <otherwise>
-                        1, scoring_threshold
+                        0, scoring_threshold
                     </otherwise>
                 </choose>
             </when>
@@ -163,7 +163,7 @@
                         </foreach>
                     </when>
                     <otherwise>
-                        1, scoring_threshold
+                        0, scoring_threshold
                     </otherwise>
                 </choose>
             </when>
