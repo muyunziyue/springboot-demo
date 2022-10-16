@@ -137,8 +137,10 @@
                   max(if(b1.indicator_name = '5g_to_4g', b1.indicator_item_name, '')) as indicator1_grade_item_name,
                   max(if(b1.indicator_name = '5g_to_4g', b1.indicator_level, 0)) as indicator1_grade_level,
                   max(if(b1.indicator_name = '5g_to_4g', b1.indicator_score, toDecimal64(0, 5))) as indicator1_grade_score,
-                  max(if(b1.indicator_name = '5g_to_4g', b1.indicator_weighted_score, toDecimal64(0, 5))) as indicator1_weight,
-                  max(if(b1.indicator_name = '5g_to_4g', toDecimal64(b1.indicator_weighted_score * b1.indicator_score, 5), toDecimal64(0, 5))) as indicator1_weighted_score,
+                   multiIf(and(scoring_type == '1', max(if(b1.indicator_name = '5g_to_4g', b1.indicator_weighted_score_type, '')) == '1'), max(if(b1.indicator_name = '5g_to_4g', b1.indicator_score, toDecimal64(0, 5)))
+                         , and(scoring_type == '2', max(if(b1.indicator_name = '5g_to_4g', b1.indicator_weighted_score_type, '')) == '2'), max(if(b1.indicator_name = '5g_to_4g', b1.indicator_score, toDecimal64(0, 5)))
+                         , toDecimal64(0, 5)) as indicator1_weight,
+                  max(if(b1.indicator_name = '5g_to_4g', toDecimal64(b1.indicator_weighted_score * b1.indicator_score, 5), toDecimal64(0, 5))) as indicator1_weighted_score, --todo 如果是一票通过，那么这里的权重分数应该如何设置
                   max(if(b1.indicator_name = 'wireless_utilization', b1.indicator_name, '')) as indicator2_name,
                   max(if(b1.indicator_name = 'wireless_utilization', b1.indicator_value, '')) as indicator2_value,
                   max(if(b1.indicator_name = 'wireless_utilization', b1.aid, '')) as indicator2_grade_id,
@@ -468,8 +470,15 @@
         has(multiIf(and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
         and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as indicator_one_vote_boolean,
 
-        toDecimal64(multiIf(and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
-        and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
+        toDecimal64(multiIf(
+               is_indicator_one_vote, toDecimal64(1,5),
+               and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
+               and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
+        multiIf(
+            is_indicator_one_vote, '1',
+            is_indicator_weighted, '2',
+            ''
+        ) as indicator_weighted_score_type,
         multiIf(
         and(a1.built_state = '10',new_stock_weight_name_index), 1,
         and(a1.built_state = '11',new_new_weight_name_index), 1, 0) as is_indicator_weighted,
