@@ -35,10 +35,10 @@
             <when test="(startMonth != null and startMonth != '') and (endMonth != null and endMonth != '')">
                 and yearMonth >= #{startMonth}
                 and yearMonth &lt; #{endMonth}
-                order by a1.forecast_day desc, a1.ids desc
-                limit 0, 1
-                by yearMonth, region_code, general_product_name
             </when>
         </choose>
+        order by a1.forecast_day desc, a1.ids desc
+        limit 0, 1
+        by yearMonth, a1.region_code, a2.general_product_name
     </select>
 </mapper>
