@@ -20,7 +20,7 @@
             indoor_bs_num_5g, indoor_p_cell_num_5g, frequency_point_5g, freq_num_5g, indoor_building_site_rru_num_5g,
             indoor_building_site_pruu_num_5g, indoor_building_site_ext_pico_remote_unit_num_5g, rival, rival_common_site,
             rival_pre, spe_gua, spe_gua_type, vert_ind_dem, perday_flow_prediction_5g, built_state, indicator3_item3,
-            indicator3_item7, scoring_type, score, scoring_threshold, market_guarantee_indicator_list,
+            indicator3_item7, scoring_type,indicator_scoring_list, score, scoring_threshold, market_guarantee_indicator_list,
             indicator_analysis_indicator_list, indicator1_name, indicator1_value, indicator1_grade_id, indicator1_algorithm_type,
             indicator1_grade_item_name, indicator1_grade_level, indicator1_grade_score, indicator1_weight,
             indicator1_weighted_score, indicator2_name, indicator2_value, indicator2_grade_id, indicator2_algorithm_type,
@@ -126,6 +126,9 @@
                   any(b1.indicator3_item3) as indicator3_item3,
                   any(b1.indicator3_item7) as indicator3_item7,
                   multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') as scoring_type, --打分类型:1-一票通过 2-专家权重打分 3-熵权权重打分
+                  multiIf(scoring_type == '1', groupUniqArray(if(b1.is_indicator_one_vote, b1.indicator_name, null)),
+                          scoring_type == '2', groupUniqArray(if(b1.is_indicator_weighted, b1.indicator_name, null)),
+                          emptyArrayString()) as indicator_scoring_list,
                   multiIf(and(scoring_type == '1', has(groupArray(b1.indicator_one_vote_boolean), 1)),toDecimal64(100, 5), scoring_type == '2', toDecimal64(sum(if(b1.is_indicator_weighted, b1.indicator_weighted_score * b1.indicator_score, null)), 5),0) as score,
                   toDecimal64(0, 5) as scoring_threshold,
                   ['scene_value', 'policy_guarantee', 'network_complaints', 'rival_pre'] as market_guarantee_indicator_list, --市场保障- 场景价值、政策保障、网络投诉、竞对压力
@@ -137,10 +140,8 @@
                   max(if(b1.indicator_name = '5g_to_4g', b1.indicator_item_name, '')) as indicator1_grade_item_name,
                   max(if(b1.indicator_name = '5g_to_4g', b1.indicator_level, 0)) as indicator1_grade_level,
                   max(if(b1.indicator_name = '5g_to_4g', b1.indicator_score, toDecimal64(0, 5))) as indicator1_grade_score,
-                   multiIf(and(scoring_type == '1', max(if(b1.indicator_name = '5g_to_4g', b1.indicator_weighted_score_type, '')) == '1'), max(if(b1.indicator_name = '5g_to_4g', b1.indicator_score, toDecimal64(0, 5)))
-                         , and(scoring_type == '2', max(if(b1.indicator_name = '5g_to_4g', b1.indicator_weighted_score_type, '')) == '2'), max(if(b1.indicator_name = '5g_to_4g', b1.indicator_score, toDecimal64(0, 5)))
-                         , toDecimal64(0, 5)) as indicator1_weight,
-                  max(if(b1.indicator_name = '5g_to_4g', toDecimal64(b1.indicator_weighted_score * b1.indicator_score, 5), toDecimal64(0, 5))) as indicator1_weighted_score, --todo 如果是一票通过，那么这里的权重分数应该如何设置
+                  max(if(b1.indicator_name = '5g_to_4g', b1.indicator_weighted_score, toDecimal64(0, 5))) as indicator1_weight,
+                  max(if(b1.indicator_name = '5g_to_4g', toDecimal64(b1.indicator_weighted_score * b1.indicator_score, 5), toDecimal64(0, 5))) as indicator1_weighted_score,
                   max(if(b1.indicator_name = 'wireless_utilization', b1.indicator_name, '')) as indicator2_name,
                   max(if(b1.indicator_name = 'wireless_utilization', b1.indicator_value, '')) as indicator2_value,
                   max(if(b1.indicator_name = 'wireless_utilization', b1.aid, '')) as indicator2_grade_id,
@@ -469,16 +470,9 @@
         as Array(Array(Int32)))                     as new_new_one_level_array,
         has(multiIf(and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
         and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as indicator_one_vote_boolean,
-
-        toDecimal64(multiIf(
-               is_indicator_one_vote, toDecimal64(1,5),
-               and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
-               and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
-        multiIf(
-            is_indicator_one_vote, '1',
-            is_indicator_weighted, '2',
-            ''
-        ) as indicator_weighted_score_type,
+        toDecimal64(
+            multiIf(and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
+                    and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
         multiIf(
         and(a1.built_state = '10',new_stock_weight_name_index), 1,
         and(a1.built_state = '11',new_new_weight_name_index), 1, 0) as is_indicator_weighted,
