@@ -65,8 +65,9 @@
         global join ods.ods_same_variety_definition a2
         on a1.general_product_name = a2.same_variety_definition and a1.product_form = a2.form_merge_name
         where a1.is_whole = '0'
+            and a1.forecast_day = (select max(forecast_day) from ods.ods_approval_number_shortage)
         <if test="goodsName != null and goodsName != ''">
-            and a1.general_product_name = #{goodsName}
+            and a2.general_product_name = #{goodsName}
         </if>
         group by a1.region_code
         ) b2 on b1.regionCode = b2.regionCode
