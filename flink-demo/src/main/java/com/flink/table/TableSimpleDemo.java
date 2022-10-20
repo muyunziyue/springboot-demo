@@ -69,6 +69,7 @@ public class TableSimpleDemo {
                     @Override
                     public void process(String s, Context context, Iterable<Event> elements, Collector<Tuple2<String, Long>> out) throws Exception {
                         System.out.println("窗口开始时间：" + fastDateFormat.format(context.window().getStart()));
+                        System.out.println("当前系统时间：" + fastDateFormat.format(System.currentTimeMillis()));
                         count = 0L;
                         elements.forEach(event -> ++count);
                         out.collect(Tuple2.of(s, count));

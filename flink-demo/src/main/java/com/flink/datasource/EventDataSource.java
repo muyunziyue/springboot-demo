@@ -35,7 +35,7 @@ public class EventDataSource implements ParallelSourceFunction<Event> {
         String id = Thread.currentThread().getId() + "-" + orderNo++;
         String user = userList.get(random.nextInt(userList.size()));
         String url = urlList.get(random.nextInt(urlList.size()));
-        long timestamp = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis() - 60 * 1000;
 
         return new Event(id, user, url, timestamp);
     }
