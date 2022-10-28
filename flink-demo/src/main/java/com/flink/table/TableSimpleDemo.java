@@ -47,7 +47,7 @@ public class TableSimpleDemo {
         //checkpoint超时的时间
         env.getCheckpointConfig().setCheckpointTimeout(60000);
         //cancel程序的时候保存checkpoint
-        env.getCheckpointConfig().setExternalizedCheckpointCleanup(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        env.getCheckpointConfig().enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
 
         // 设置重启策略
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, Time.minutes(5L)));

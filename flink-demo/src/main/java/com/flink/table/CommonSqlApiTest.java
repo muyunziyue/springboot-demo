@@ -1,17 +1,15 @@
 package com.flink.table;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
-import org.apache.flink.table.api.bridge.java.BatchTableEnvironment;
 
 /**
  * @Author ldx
  * @Date 2022/10/20
  * @Description table/sql的公共api
  **/
-public class CommonApiTest {
+public class CommonSqlApiTest {
     public static void main(String[] args) {
         // 1.1 基于blink版本进行流处理（流批一体）
         EnvironmentSettings settings = EnvironmentSettings.newInstance()
