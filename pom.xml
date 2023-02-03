@@ -19,6 +19,7 @@
         <module>zk-demo</module>
         <module>flink-demo</module>
         <module>redis-demo</module>
+        <module>hadoop-demo</module>
     </modules>
 
     <properties>

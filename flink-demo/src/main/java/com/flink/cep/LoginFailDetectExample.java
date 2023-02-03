@@ -73,7 +73,7 @@ public class LoginFailDetectExample {
         // 4. 将检测到的复杂事件提取出来，进行处理得到报警信息输出
         SingleOutputStreamOperator<String> warningStream = patternStream.select(new PatternSelectFunction<LoginEvent, String>() {
             @Override
-            public String select(Map<String, List<LoginEvent>> map) throws Exception { // map的key是上面定义的简单事件的名称，list是因为可能一个事件允许重复发生
+            public String select(Map<String, List<LoginEvent>> map) throws Exception { // map的key是上面定义的简单事件的名称，list是因为一个事件允许重复发生
                 // 提取复杂事件中的三次登陆失败事件
                 LoginEvent firstFailEvent = map.get("first").get(0);
                 LoginEvent secondFailEvent = map.get("second").get(0);
