@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="/data/api/indoor/weighted_score/entropy_method">
+        select d1.built_state as builtState --入参基站类型
+            , d1.indicator_name as indicatorName --指标名称
+            , ifNull(d1.indicator_dj / d1.indicator_dj_sum, 0) as indicatorWeight --指标权重
+        from (
+              select c1.indicator_name
+                   , c1.indicator_dj
+                   , sum(c1.indicator_dj) over (partition by c1.built_state) as indicator_dj_sum
+                   , c1.built_state
+              from (
+                    <foreach collection="params.raw.entropyMethodPool" item="item" separator="union all">
+                       select 1 / ln(count(b1.indicator_name))                 as total_count_ln --K系数:1 / ln(数据量)
+                            , 1 - (total_count_ln) * abs(sum(b1.indicator_ln)) as indicator_dj --如果为null说明该指标所有指标值都是0
+                            , any(b1.indicator_name)                           as indicator_name --一个event_id，对应一个指标
+                            , '${item.builtState}'                               as built_state
+                       from (
+                                select a1.indicator_name
+                                , a1.indicator_level / if(a1.indicator_level_sum = 0, 1, indicator_level_sum)     as indicator_proportion --指标占比，该指标对指标等级总和的占比
+                                , indicator_proportion * if(indicator_proportion = 0, null, ln(indicator_proportion)) as indicator_ln         --指标占比*LN(指标占比)
+                                from (
+                                         select indicator_name
+                                              , indicator_level
+                                              , sum(indicator_level) over () as indicator_level_sum --对指标等级进行求和
+                                         from cmdi_pvopp.ads_indoor_grade_level_for_annual_plan_info
+                                         where event_id = #{item.indicatorGradeId} and indicator_level is not null
+                                      ) a1
+                              ) b1
+                    </foreach>
+                    ) c1
+              ) d1
+        SETTINGS allow_experimental_window_functions = 1
+    </select>
+</mapper>
