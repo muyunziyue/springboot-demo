@@ -2,51 +2,208 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.test.Test">
     <insert id="/data/api/indoor/weighted_score/invoke_scoring">
-        insert into cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
-        (id, province, province_name, province_abbreviation, province_type, province_order, citys, citys_name,
-        citys_abbreviation, citys_type, citys_order, citys_distribution, event_id, site_type, data_sampling_time, area_type,
-        site_name, site_location, longitude, latitude, cover_area, cover_scene, secondary_cover_scene, other_cover_scene,
-        related_room_location_4g, built_state_4g, base_station_id_4g, e_cgi_set_4g, built_way_4g,
-        indoor_building_site_2g_900m_distri_sys_4g, indoor_building_site_cell_distri_sys_4g, indoor_distri_pico_cover_area_4g,
-        indoor_integration_pico_cover_area_4g, indoor_trad_single_das_cover_area_4g, indoor_trad_double_das_cover_area_4g,
-        indoor_fiber_distri_sys_cover_area_4g, indoor_freq_conver_distri_sys_cover_area_4g, indoor_ext_pico_cover_area_4g,
-        indoor_inter_building_cover_area_4g, indoor_bs_num_4g, indoor_p_cell_num_4g, frequency_4g, freq_num_4g,
-        indoor_building_site_ruu_num_4g, indoor_building_site_pruu_num_4g, indoor_building_site_ext_pico_remote_unit_num_4g,
-        related_room_location_5g, distri_sta_5g, built_state_5g, base_station_id_5g, e_cgi_collection_5g, built_way_5g,
-        indoor_distri_pico_cover_area_2t_5g, indoor_distri_pico_cover_area_4t_5g, indoor_integration_pico_cover_area_5g,
-        indoor_trad_single_das_cover_area_5g, indoor_trad_double_das_cover_area_5g, indoor_fiber_distri_sys_cover_area_5g,
-        indoor_freq_conver_distri_sys_cover_area_5g, indoor_ext_pico_cover_area_5g, indoor_inter_building_cover_area_5g,
-        indoor_bs_num_5g, indoor_p_cell_num_5g, frequency_point_5g, freq_num_5g, indoor_building_site_rru_num_5g,
-        indoor_building_site_pruu_num_5g, indoor_building_site_ext_pico_remote_unit_num_5g, rival, rival_common_site,
-        rival_pre, spe_gua, spe_gua_type, vert_ind_dem, perday_flow_prediction_5g, built_state, indicator3_item3,
-        indicator3_item7, scoring_type,indicator_scoring_list, score, scoring_threshold, market_guarantee_indicator_list,
-        indicator_analysis_indicator_list, indicator1_name, indicator1_value, indicator1_grade_id, indicator1_algorithm_type,
-        indicator1_grade_item_name, indicator1_grade_level, indicator1_grade_score, indicator1_weight,
-        indicator1_weighted_score, indicator2_name, indicator2_value, indicator2_grade_id, indicator2_algorithm_type,
-        indicator2_grade_item_name, indicator2_grade_level, indicator2_grade_score, indicator2_weight,
-        indicator2_weighted_score, indicator3_name, indicator3_value, indicator3_grade_id, indicator3_algorithm_type,
-        indicator3_grade_item_name, indicator3_grade_level, indicator3_grade_score, indicator3_weight,
-        indicator3_weighted_score, indicator4_name, indicator4_value, indicator4_grade_id, indicator4_algorithm_type,
-        indicator4_grade_item_name, indicator4_grade_level, indicator4_grade_score, indicator4_weight,
-        indicator4_weighted_score, indicator5_name, indicator5_value, indicator5_grade_id, indicator5_algorithm_type,
-        indicator5_grade_item_name, indicator5_grade_level, indicator5_grade_score, indicator5_weight,
-        indicator5_weighted_score, indicator6_name, indicator6_value, indicator6_grade_id, indicator6_algorithm_type,
-        indicator6_grade_item_name, indicator6_grade_level, indicator6_grade_score, indicator6_weight,
-        indicator6_weighted_score, indicator7_name, indicator7_value, indicator7_grade_id, indicator7_algorithm_type,
-        indicator7_grade_item_name, indicator7_grade_level, indicator7_grade_score, indicator7_weight,
-        indicator7_weighted_score, indicator8_name, indicator8_value, indicator8_grade_id, indicator8_algorithm_type,
-        indicator8_grade_item_name, indicator8_grade_level, indicator8_grade_score, indicator8_weight,
-        indicator8_weighted_score, indicator9_name, indicator9_value, indicator9_grade_id, indicator9_algorithm_type,
-        indicator9_grade_item_name, indicator9_grade_level, indicator9_grade_score, indicator9_weight,
-        indicator9_weighted_score, indicator10_name, indicator10_value, indicator10_grade_id, indicator10_algorithm_type,
-        indicator10_grade_item_name, indicator10_grade_level, indicator10_grade_score, indicator10_weight,
-        indicator10_weighted_score, indicator11_name, indicator11_value, indicator11_grade_id, indicator11_algorithm_type,
-        indicator11_grade_item_name, indicator11_grade_level, indicator11_grade_score, indicator11_weight,
-        indicator11_weighted_score, indicator12_name, indicator12_value, indicator12_grade_id, indicator12_algorithm_type,
-        indicator12_grade_item_name, indicator12_grade_level, indicator12_grade_score, indicator12_weight,
-        indicator12_weighted_score, is_high_value_by_score, is_high_value_by_manual_work, is_high_value, manual_work_reason,
-        dwd_site_for_annual_plan_indoor_info_id, dwd_site_for_annual_plan_indoor_info_event_id, create_time, last_update_time)
+        insert into cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+            (id,
+           site_type,
+           built_state,
+           data_sampling_time,
+           event_id,
+           province,
+           province_name,
+           province_abbreviation,
+           province_type,
+           province_order,
+           citys,
+           citys_name,
+           citys_abbreviation,
+           citys_type,
+           citys_order,
+           citys_distribution,
+           area_type,
+           building_site_name,
+           building_site_cover_scene,
+           building_site_secondary_cover_scene,
+           building_site_other_cover_scene,
+           building_site_location,
+           building_site_area,
+           related_room_location_4g,
+           built_state_4g,
+           base_station_name_4g,
+           base_station_id_4g,
+           base_station_longitude_4g,
+           base_station_latitude_4g,
+           e_cgi_collection_4g,
+           built_way_4g,
+           base_station_cover_area_4g,
+           has_building_site_2g_900m_distri_sys_4g,
+           frequency_4g,
+           freq_num_4g,
+           ruu_num_4g,
+           pruu_num_4g,
+           ext_pico_remote_unit_num_4g,
+           investment_estimation_4g,
+           related_room_location_5g,
+           distri_sta_5g,
+           built_state_5g,
+           bs_num_5g,
+           base_station_name_5g,
+           base_station_id_5g,
+           base_station_longitude_5g,
+           base_station_latitude_5g,
+           e_cgi_collection_5g,
+           built_way_5g,
+           base_station_cover_area_5g,
+           perday_flow_prediction_5g,
+           frequency_point_5g,
+           freq_num_5g,
+           rru_num_5g,
+           pruu_num_5g,
+           ext_pico_remote_unit_num_5g,
+           rival,
+           rival_common_site,
+           rival_pre,
+           spe_gua,
+           spe_gua_type,
+           vert_ind_dem,
+           grid_per_26m_fre,
+           grid_per_7m_fre,
+           indicator3_item3,
+           scoring_type,
+           indicator_scoring_list,
+           score,
+           scoring_threshold,
+           market_guarantee_indicator_list,
+           indicator_analysis_indicator_list,
+           indicator0_name,
+           indicator0_value,
+           indicator0_grade_id,
+           indicator0_algorithm_type,
+           indicator0_grade_item_name,
+           indicator0_grade_level,
+           indicator0_grade_score,
+           indicator0_weight,
+           indicator0_weighted_score,
+           indicator1_name,
+           indicator1_value,
+           indicator1_grade_id,
+           indicator1_algorithm_type,
+           indicator1_grade_item_name,
+           indicator1_grade_level,
+           indicator1_grade_score,
+           indicator1_weight,
+           indicator1_weighted_score,
+           indicator2_name,
+           indicator2_value,
+           indicator2_grade_id,
+           indicator2_algorithm_type,
+           indicator2_grade_item_name,
+           indicator2_grade_level,
+           indicator2_grade_score,
+           indicator2_weight,
+           indicator2_weighted_score,
+           indicator3_name,
+           indicator3_value,
+           indicator3_grade_id,
+           indicator3_algorithm_type,
+           indicator3_grade_item_name,
+           indicator3_grade_level,
+           indicator3_grade_score,
+           indicator3_weight,
+           indicator3_weighted_score,
+           indicator4_name,
+           indicator4_value,
+           indicator4_grade_id,
+           indicator4_algorithm_type,
+           indicator4_grade_item_name,
+           indicator4_grade_level,
+           indicator4_grade_score,
+           indicator4_weight,
+           indicator4_weighted_score,
+           indicator5_name,
+           indicator5_value,
+           indicator5_grade_id,
+           indicator5_algorithm_type,
+           indicator5_grade_item_name,
+           indicator5_grade_level,
+           indicator5_grade_score,
+           indicator5_weight,
+           indicator5_weighted_score,
+           indicator6_name,
+           indicator6_value,
+           indicator6_grade_id,
+           indicator6_algorithm_type,
+           indicator6_grade_item_name,
+           indicator6_grade_level,
+           indicator6_grade_score,
+           indicator6_weight,
+           indicator6_weighted_score,
+           indicator7_name,
+           indicator7_value,
+           indicator7_grade_id,
+           indicator7_algorithm_type,
+           indicator7_grade_item_name,
+           indicator7_grade_level,
+           indicator7_grade_score,
+           indicator7_weight,
+           indicator7_weighted_score,
+           indicator8_name,
+           indicator8_value,
+           indicator8_grade_id,
+           indicator8_algorithm_type,
+           indicator8_grade_item_name,
+           indicator8_grade_level,
+           indicator8_grade_score,
+           indicator8_weight,
+           indicator8_weighted_score,
+           indicator9_name,
+           indicator9_value,
+           indicator9_grade_id,
+           indicator9_algorithm_type,
+           indicator9_grade_item_name,
+           indicator9_grade_level,
+           indicator9_grade_score,
+           indicator9_weight,
+           indicator9_weighted_score,
+           indicator10_name,
+           indicator10_value,
+           indicator10_grade_id,
+           indicator10_algorithm_type,
+           indicator10_grade_item_name,
+           indicator10_grade_level,
+           indicator10_grade_score,
+           indicator10_weight,
+           indicator10_weighted_score,
+           indicator11_name,
+           indicator11_value,
+           indicator11_grade_id,
+           indicator11_algorithm_type,
+           indicator11_grade_item_name,
+           indicator11_grade_level,
+           indicator11_grade_score,
+           indicator11_weight,
+           indicator11_weighted_score,
+           indicator12_name,
+           indicator12_value,
+           indicator12_grade_id,
+           indicator12_algorithm_type,
+           indicator12_grade_item_name,
+           indicator12_grade_level,
+           indicator12_grade_score,
+           indicator12_weight,
+           indicator12_weighted_score,
+           is_high_value_by_score,
+           is_high_value_by_manual_work,
+           is_high_value,
+           manual_work_reason,
+           dwd_indoor_site_bom_plan_match_for_annual_plan_info_id,
+           dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
+           create_time,
+           last_update_time)
         select upper(replaceAll(CAST(generateUUIDv4(), 'String'), '-', '')) as id,
+        any(b1.site_type) as site_type,
+        any(b1.built_state) as built_state,
+        any(b1.data_sampling_time) as data_sampling_time,
+        #{params.eventId} as event_id,
         any(b1.province) as province,
         any(b1.province_name) as province_name,
         any(b1.province_abbreviation) as province_abbreviation,
@@ -58,73 +215,60 @@
         any(b1.citys_type) as citys_type,
         any(b1.citys_order) as citys_order,
         any(b1.citys_distribution) as citys_distribution,
-        #{params.eventId} as event_id,
-        any(b1.site_type) as site_type,
-        any(b1.data_sampling_time) as data_sampling_time,
         any(b1.area_type) as area_type,
-        any(b1.site_name) as site_name,
-        any(b1.site_location) as site_location,
-        any(b1.longitude) as longitude,
-        any(b1.latitude) as latitude,
-        any(b1.cover_area) as cover_area,
-        any(b1.cover_scene) as cover_scene,
-        any(b1.secondary_cover_scene) as secondary_cover_scene,
-        any(b1.other_cover_scene) as other_cover_scene,
+        any(b1.building_site_name) as building_site_name,
+        any(b1.building_site_cover_scene) as building_site_cover_scene,
+        any(b1.building_site_secondary_cover_scene) as building_site_secondary_cover_scene,
+        any(b1.building_site_other_cover_scene) as building_site_other_cover_scene,
+        any(b1.building_site_location) as building_site_location,
+        any(b1.building_site_area) as building_site_area,
         any(b1.related_room_location_4g) as related_room_location_4g,
         any(b1.built_state_4g) as built_state_4g,
+        any(b1.base_station_name_4g) as base_station_name_4g,
         any(b1.base_station_id_4g) as base_station_id_4g,
-        any(b1.e_cgi_set_4g) as e_cgi_set_4g,
+        any(b1.base_station_longitude_4g) as base_station_longitude_4g,
+        any(b1.base_station_latitude_4g) as base_station_latitude_4g,
+        any(b1.e_cgi_collection_4g) as e_cgi_collection_4g,
         any(b1.built_way_4g) as built_way_4g,
-        any(b1.indoor_building_site_2g_900m_distri_sys_4g) as indoor_building_site_2g_900m_distri_sys_4g,
-        any(b1.indoor_building_site_cell_distri_sys_4g) as indoor_building_site_cell_distri_sys_4g,
-        any(b1.indoor_distri_pico_cover_area_4g) as indoor_distri_pico_cover_area_4g,
-        any(b1.indoor_integration_pico_cover_area_4g) as indoor_integration_pico_cover_area_4g,
-        any(b1.indoor_trad_single_das_cover_area_4g) as indoor_trad_single_das_cover_area_4g,
-        any(b1.indoor_trad_double_das_cover_area_4g) as indoor_trad_double_das_cover_area_4g,
-        any(b1.indoor_fiber_distri_sys_cover_area_4g) as indoor_fiber_distri_sys_cover_area_4g,
-        any(b1.indoor_freq_conver_distri_sys_cover_area_4g) as indoor_freq_conver_distri_sys_cover_area_4g,
-        any(b1.indoor_ext_pico_cover_area_4g) as indoor_ext_pico_cover_area_4g,
-        any(b1.indoor_inter_building_cover_area_4g) as indoor_inter_building_cover_area_4g,
-        any(b1.indoor_bs_num_4g) as indoor_bs_num_4g,
-        any(b1.indoor_p_cell_num_4g) as indoor_p_cell_num_4g,
+        any(b1.base_station_cover_area_4g) as base_station_cover_area_4g,
+        any(b1.has_building_site_2g_900m_distri_sys_4g) as has_building_site_2g_900m_distri_sys_4g,
         any(b1.frequency_4g) as frequency_4g,
         any(b1.freq_num_4g) as freq_num_4g,
-        any(b1.indoor_building_site_ruu_num_4g) as indoor_building_site_ruu_num_4g,
-        any(b1.indoor_building_site_pruu_num_4g) as indoor_building_site_pruu_num_4g,
-        any(b1.indoor_building_site_ext_pico_remote_unit_num_4g) as indoor_building_site_ext_pico_remote_unit_num_4g,
+        any(b1.ruu_num_4g) as ruu_num_4g,
+        any(b1.pruu_num_4g) as pruu_num_4g,
+        any(b1.ext_pico_remote_unit_num_4g) as ext_pico_remote_unit_num_4g,
+        any(b1.investment_estimation_4g) as investment_estimation_4g,
         any(b1.related_room_location_5g) as related_room_location_5g,
         any(b1.distri_sta_5g) as distri_sta_5g,
         any(b1.built_state_5g) as built_state_5g,
+        any(b1.bs_num_5g) as bs_num_5g,
+        any(b1.base_station_name_5g) as base_station_name_5g,
         any(b1.base_station_id_5g) as base_station_id_5g,
+        any(b1.base_station_longitude_5g) as base_station_longitude_5g,
+        any(b1.base_station_latitude_5g) as base_station_latitude_5g,
         any(b1.e_cgi_collection_5g) as e_cgi_collection_5g,
         any(b1.built_way_5g) as built_way_5g,
-        any(b1.indoor_distri_pico_cover_area_2t_5g) as indoor_distri_pico_cover_area_2t_5g,
-        any(b1.indoor_distri_pico_cover_area_4t_5g) as indoor_distri_pico_cover_area_4t_5g,
-        any(b1.indoor_integration_pico_cover_area_5g) as indoor_integration_pico_cover_area_5g,
-        any(b1.indoor_trad_single_das_cover_area_5g) as indoor_trad_single_das_cover_area_5g,
-        any(b1.indoor_trad_double_das_cover_area_5g) as indoor_trad_double_das_cover_area_5g,
-        any(b1.indoor_fiber_distri_sys_cover_area_5g) as indoor_fiber_distri_sys_cover_area_5g,
-        any(b1.indoor_freq_conver_distri_sys_cover_area_5g) as indoor_freq_conver_distri_sys_cover_area_5g,
-        any(b1.indoor_ext_pico_cover_area_5g) as indoor_ext_pico_cover_area_5g,
-        any(b1.indoor_inter_building_cover_area_5g) as indoor_inter_building_cover_area_5g,
-        any(b1.indoor_bs_num_5g) as indoor_bs_num_5g,
-        any(b1.indoor_p_cell_num_5g) as indoor_p_cell_num_5g,
+        any(b1.base_station_cover_area_5g) as base_station_cover_area_5g,
+        any(b1.perday_flow_prediction_5g) as perday_flow_prediction_5g,
         any(b1.frequency_point_5g) as frequency_point_5g,
         any(b1.freq_num_5g) as freq_num_5g,
-        any(b1.indoor_building_site_rru_num_5g) as indoor_building_site_rru_num_5g,
-        any(b1.indoor_building_site_pruu_num_5g) as indoor_building_site_pruu_num_5g,
-        any(b1.indoor_building_site_ext_pico_remote_unit_num_5g) as indoor_building_site_ext_pico_remote_unit_num_5g,
+        any(b1.rru_num_5g) as rru_num_5g,
+        any(b1.pruu_num_5g) as pruu_num_5g,
+        any(b1.ext_pico_remote_unit_num_5g) as ext_pico_remote_unit_num_5g,
         any(b1.rival) as rival,
         any(b1.rival_common_site) as rival_common_site,
         any(b1.rival_pre) as rival_pre,
         any(b1.spe_gua) as spe_gua,
         any(b1.spe_gua_type) as spe_gua_type,
         any(b1.vert_ind_dem) as vert_ind_dem,
-        any(b1.perday_flow_prediction_5g) as perday_flow_prediction_5g,
-        any(b1.built_state) as built_state,
+        any(b1.grid_per_26m_fre) as grid_per_26m_fre,
+        any(b1.grid_per_7m_fre) as grid_per_7m_fre,
         any(b1.indicator3_item3) as indicator3_item3,
-        any(b1.indicator3_item7) as indicator3_item7,
-        multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') as scoring_type, --打分类型:1-一票通过 2-专家权重打分 3-熵权权重打分
+        <choose>
+        <when test="params.raw.scoringType !=null and params.raw.scoringType=='3'">'3'</when>
+        <otherwise>multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','')</otherwise>
+        </choose>
+         as scoring_type, --打分类型:1-一票通过 2-专家权重打分 3-熵权权重打分
         multiIf(scoring_type == '1', groupUniqArray(if(b1.is_indicator_one_vote, b1.indicator_name, null)),
         scoring_type == '2', groupUniqArray(if(b1.is_indicator_weighted, b1.indicator_name, null)),
         emptyArrayString()) as indicator_scoring_list,
@@ -132,6 +276,15 @@
         toDecimal64(0, 5) as scoring_threshold,
         ['scene_value', 'policy_guarantee', 'network_complaints', 'rival_pre'] as market_guarantee_indicator_list, --市场保障- 场景价值、政策保障、网络投诉、竞对压力
         ['5g_to_4g','5g_terminal_penetration','flow_density'] as indicator_analysis_indicator_list, --指标分析- 5G倒流4G、5G终端渗透率、流量密度
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_name, '')) as indicator0_name,
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_value, '')) as indicator0_value,
+        max(if(b1.indicator_name = 'vert_ind', b1.aid, '')) as indicator0_grade_id,
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_algorithm_type, '')) as indicator0_algorithm_type,
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_item_name, '')) as indicator0_grade_item_name,
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_level, 0)) as indicator0_grade_level,
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_score, toDecimal64(0, 5))) as indicator0_grade_score,
+        max(if(b1.indicator_name = 'vert_ind', b1.indicator_weighted_score, toDecimal64(0, 5))) as indicator0_weight,
+        max(if(b1.indicator_name = 'vert_ind', toDecimal64(b1.indicator_weighted_score * b1.indicator_score, 5), toDecimal64(0, 5))) as indicator0_weighted_score,
         max(if(b1.indicator_name = '5g_to_4g', b1.indicator_name, '')) as indicator1_name,
         max(if(b1.indicator_name = '5g_to_4g', b1.indicator_value, '')) as indicator1_value,
         max(if(b1.indicator_name = '5g_to_4g', b1.aid, '')) as indicator1_grade_id,
@@ -244,12 +397,16 @@
         '' as is_high_value_by_manual_work,
         '' as is_high_value,
         '' as manual_work_reason,
-        b1.dwd_site_for_annual_plan_indoor_info_id,
-        any(b1.dwd_site_for_annual_plan_indoor_info_event_id) as dwd_site_for_annual_plan_indoor_info_event_id,
+        b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_id,
+        any(b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id) as dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
         now() as create_time,
         now() as last_update_time
         from (
         select a1.id as aid,
+        a1.site_type,
+        a1.built_state,
+        a1.data_sampling_time,
+        a1.event_id,
         a1.province,
         a1.province_name,
         a1.province_abbreviation,
@@ -261,80 +418,63 @@
         a1.citys_type,
         a1.citys_order,
         a1.citys_distribution,
-        a1.event_id,
-        a1.site_type,
-        a1.data_sampling_time,
         a1.area_type,
-        a1.site_name,
-        a1.site_location,
-        a1.longitude,
-        a1.latitude,
-        a1.cover_area,
-        a1.cover_scene,
-        a1.secondary_cover_scene,
-        a1.other_cover_scene,
+        a1.building_site_name,
+        a1.building_site_cover_scene,
+        a1.building_site_secondary_cover_scene,
+        a1.building_site_other_cover_scene,
+        a1.building_site_location,
+        a1.building_site_area,
         a1.related_room_location_4g,
         a1.built_state_4g,
+        a1.base_station_name_4g,
         a1.base_station_id_4g,
-        a1.e_cgi_set_4g,
+        a1.base_station_longitude_4g,
+        a1.base_station_latitude_4g,
+        a1.e_cgi_collection_4g,
         a1.built_way_4g,
-        a1.indoor_building_site_2g_900m_distri_sys_4g,
-        a1.indoor_building_site_cell_distri_sys_4g,
-        a1.indoor_distri_pico_cover_area_4g,
-        a1.indoor_integration_pico_cover_area_4g,
-        a1.indoor_trad_single_das_cover_area_4g,
-        a1.indoor_trad_double_das_cover_area_4g,
-        a1.indoor_fiber_distri_sys_cover_area_4g,
-        a1.indoor_freq_conver_distri_sys_cover_area_4g,
-        a1.indoor_ext_pico_cover_area_4g,
-        a1.indoor_inter_building_cover_area_4g,
-        a1.indoor_bs_num_4g,
-        a1.indoor_p_cell_num_4g,
+        a1.base_station_cover_area_4g,
+        a1.has_building_site_2g_900m_distri_sys_4g,
         a1.frequency_4g,
         a1.freq_num_4g,
-        a1.indoor_building_site_ruu_num_4g,
-        a1.indoor_building_site_pruu_num_4g,
-        a1.indoor_building_site_ext_pico_remote_unit_num_4g,
+        a1.ruu_num_4g,
+        a1.pruu_num_4g,
+        a1.ext_pico_remote_unit_num_4g,
+        a1.investment_estimation_4g,
         a1.related_room_location_5g,
         a1.distri_sta_5g,
         a1.built_state_5g,
+        a1.bs_num_5g,
+        a1.base_station_name_5g,
         a1.base_station_id_5g,
+        a1.base_station_longitude_5g,
+        a1.base_station_latitude_5g,
         a1.e_cgi_collection_5g,
         a1.built_way_5g,
-        a1.indoor_distri_pico_cover_area_2t_5g,
-        a1.indoor_distri_pico_cover_area_4t_5g,
-        a1.indoor_integration_pico_cover_area_5g,
-        a1.indoor_trad_single_das_cover_area_5g,
-        a1.indoor_trad_double_das_cover_area_5g,
-        a1.indoor_fiber_distri_sys_cover_area_5g,
-        a1.indoor_freq_conver_distri_sys_cover_area_5g,
-        a1.indoor_ext_pico_cover_area_5g,
-        a1.indoor_inter_building_cover_area_5g,
-        a1.indoor_bs_num_5g,
-        a1.indoor_p_cell_num_5g,
+        a1.base_station_cover_area_5g,
+        a1.perday_flow_prediction_5g,
         a1.frequency_point_5g,
         a1.freq_num_5g,
-        a1.indoor_building_site_rru_num_5g,
-        a1.indoor_building_site_pruu_num_5g,
-        a1.indoor_building_site_ext_pico_remote_unit_num_5g,
+        a1.rru_num_5g,
+        a1.pruu_num_5g,
+        a1.ext_pico_remote_unit_num_5g,
         a1.rival,
         a1.rival_common_site,
         a1.rival_pre,
         a1.spe_gua,
         a1.spe_gua_type,
         a1.vert_ind_dem,
-        a1.perday_flow_prediction_5g,
-        a1.built_state,
+        a1.grid_per_26m_fre,
+        a1.grid_per_7m_fre,
         a1.indicator3_item3,
-        a1.indicator3_item7,
         a1.indicator_name,
-        a1.indicator_value,
         a1.indicator_algorithm_type,
         a1.indicator_item_name,
         a1.indicator_level,
+        a1.indicator_value,
         a1.indicator_score,
-        a1.dwd_site_for_annual_plan_indoor_info_id,
-        a1.dwd_site_for_annual_plan_indoor_info_event_id,
+        a1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_id,
+        a1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
         indexOf(cast(
         <choose>
             <when test="params.raw.builtStateNewStock ==null ">
@@ -351,6 +491,22 @@
             </otherwise>
         </choose>
         as Array(String)), a1.indicator_name) as new_stock_weight_name_index,
+        indexOf(cast(
+        <choose>
+            <when test="params.raw.builtStateStock ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateStock != null and params.raw.builtStateStock.weightPool != null and params.raw.builtStateStock.weightPool.size() > 0">
+                <foreach collection="params.raw.builtStateStock.weightPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorName}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(String)), a1.indicator_name) as stock_weight_name_index,
         cast(
         <choose>
             <when test="params.raw.builtStateNewStock ==null ">
@@ -367,6 +523,22 @@
             </otherwise>
         </choose>
         as Array(Decimal64(5))) as new_stock_weight_weight_array,
+        cast(
+        <choose>
+            <when test="params.raw.builtStateStock ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateStock != null and params.raw.builtStateStock.weightPool != null and params.raw.builtStateStock.weightPool.size() > 0">
+                <foreach collection="params.raw.builtStateStock.weightPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorWeightRatio}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(Decimal64(5))) as stock_weight_weight_array,
         indexOf(cast(
         <choose>
             <when test="params.raw.builtStateNewNew ==null ">
@@ -415,6 +587,22 @@
             </otherwise>
         </choose>
         as Array(String)), a1.indicator_name) as new_stock_one_name_index,
+        indexOf(cast(
+        <choose>
+            <when test="params.raw.builtStateStock ==null ">
+                []
+            </when>
+            <when test="params.raw.builtStateStock != null and params.raw.builtStateStock.oneVoteThroughPool != null and params.raw.builtStateStock.oneVoteThroughPool.size() > 0">
+                <foreach collection="params.raw.builtStateStock.oneVoteThroughPool"
+                         item="item" separator="," open="[" close="]">
+                    #{item.indicatorName}
+                </foreach>
+            </when>
+            <otherwise>
+                []
+            </otherwise>
+        </choose>
+        as Array(String)), a1.indicator_name) as stock_one_name_index,
         cast(
         <choose>
             <when test="params.raw.builtStateNewStock ==null ">
@@ -433,6 +621,24 @@
             </otherwise>
         </choose>
         as Array(Array(Int32)))                     as new_stock_one_level_array,
+        cast(
+        <choose>
+            <when test="params.raw.builtStateStock ==null ">
+                [[]]
+            </when>
+            <when test="params.raw.builtStateStock != null and params.raw.builtStateStock.oneVoteThroughPool != null and params.raw.builtStateStock.oneVoteThroughPool.size() > 0">
+                <foreach collection="params.raw.builtStateStock.oneVoteThroughPool"
+                         item="item" separator="," open="[" close="]">
+                    <foreach collection="item.indicatorLevel" item="item" separator="," open="[" close="]">
+                        #{item}
+                    </foreach>
+                </foreach>
+            </when>
+            <otherwise>
+                [[]]
+            </otherwise>
+        </choose>
+        as Array(Array(Int32)))                     as stock_one_level_array,
         indexOf(cast(
         <choose>
             <when test="params.raw.builtStateNewNew ==null ">
@@ -468,17 +674,21 @@
         </choose>
         as Array(Array(Int32)))                     as new_new_one_level_array,
         has(multiIf(and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
+        and(a1.built_state = '9',  stock_one_name_index), arrayElement(stock_one_level_array, stock_one_name_index),
         and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as indicator_one_vote_boolean,
         toDecimal64(
         multiIf(and(a1.built_state = '10',new_stock_weight_name_index), arrayElement(new_stock_weight_weight_array, new_stock_weight_name_index),
+        and(a1.built_state = '9',stock_weight_name_index), arrayElement(stock_weight_weight_array, stock_weight_name_index),
         and(a1.built_state = '11',new_new_weight_name_index), arrayElement(new_new_weight_weight_array, new_new_weight_name_index), toDecimal64(0, 5)), 5) as indicator_weighted_score,
         multiIf(
         and(a1.built_state = '10',new_stock_weight_name_index), 1,
+        and(a1.built_state = '9',stock_weight_name_index), 1,
         and(a1.built_state = '11',new_new_weight_name_index), 1, 0) as is_indicator_weighted,
         has(multiIf(
         and(a1.built_state = '10',  new_stock_one_name_index), arrayElement(new_stock_one_level_array, new_stock_one_name_index),
+        and(a1.built_state = '9',  stock_one_name_index), arrayElement(stock_one_level_array, stock_one_name_index),
         and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as is_indicator_one_vote
-        from cmdi_pvopp.dwd_grade_level_for_annual_plan_indoor_info a1
+        from cmdi_pvopp.ads_indoor_grade_level_for_annual_plan_info a1
         where a1.event_id global in (''
         <choose>
             <when test="params.raw.builtStateNewStock == null">
@@ -530,8 +740,33 @@
             <otherwise>
             </otherwise>
         </choose>
+        <choose>
+            <when test="params.raw.builtStateStock == null">
+
+            </when>
+            <when test="params.raw.builtStateStock.oneVoteThroughPool != null and params.raw.builtStateStock.oneVoteThroughPool.size() > 0">
+                ,
+                <foreach collection="params.raw.builtStateStock.oneVoteThroughPool" item="item" separator="," close="" open="">
+                    #{item.indicatorGradeId}
+                </foreach>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="params.raw.builtStateStock == null">
+            </when>
+            <when test="params.raw.builtStateStock.weightPool != null and params.raw.builtStateStock.weightPool.size() > 0">
+                ,
+                <foreach collection="params.raw.builtStateStock.weightPool" item="item" separator="," close="" open="">
+                    #{item.indicatorGradeId}
+                </foreach>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
         )
         )  b1
-        group by b1.dwd_site_for_annual_plan_indoor_info_id
+        group by b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_id
     </insert>
 </mapper>
