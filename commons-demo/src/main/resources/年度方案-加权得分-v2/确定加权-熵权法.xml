@@ -4,12 +4,13 @@
     <select id="/data/api/indoor/weighted_score/entropy_method">
         select d1.built_state as builtState --入参基站类型
             , d1.indicator_name as indicatorName --指标名称
-            , ifNull(d1.indicator_dj / d1.indicator_dj_sum, 0) as indicatorWeight --指标权重
+            , if(d1.indicator_dj =0 and d1.indicator_dj_sum = 0, 1 / d1.indicator_name_count, ifNull(d1.indicator_dj / d1.indicator_dj_sum, 0)) as indicatorWeight --指标权重
         from (
               select c1.indicator_name
-                   , c1.indicator_dj
-                   , sum(c1.indicator_dj) over (partition by c1.built_state) as indicator_dj_sum
+                   , ifNotFinite(c1.indicator_dj, 0) as indicator_dj --无限数据（通常为数据量为1导致）转为0，不参与权重分配
+                   , sum(ifNotFinite(c1.indicator_dj, 0)) over (partition by c1.built_state) as indicator_dj_sum --无限数据（通常为数据量为1导致）转为0，不参与权重分配
                    , c1.built_state
+                   , count(c1.indicator_name) over(partition by c1.built_state) as indicator_name_count
               from (
                     <foreach collection="params.raw.entropyMethodPool" item="item" separator="union all">
                        select 1 / ln(count(b1.indicator_name))                 as total_count_ln --K系数:1 / ln(数据量)
