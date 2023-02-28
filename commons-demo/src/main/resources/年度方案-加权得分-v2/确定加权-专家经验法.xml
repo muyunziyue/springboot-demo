@@ -265,14 +265,14 @@
         any(b1.grid_per_7m_fre) as grid_per_7m_fre,
         any(b1.indicator3_item3) as indicator3_item3,
         <choose>
-        <when test="params.raw.scoringType !=null and params.raw.scoringType=='3'">'3'</when>
+        <when test="params.raw.scoringType !=null and params.raw.scoringType=='3'.toString()">'3'</when>
         <otherwise>multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','')</otherwise>
         </choose>
          as scoring_type, --打分类型:1-一票通过 2-专家权重打分 3-熵权权重打分
-        multiIf(scoring_type == '1', groupUniqArray(if(b1.is_indicator_one_vote, b1.indicator_name, null)),
-        scoring_type == '2', groupUniqArray(if(b1.is_indicator_weighted, b1.indicator_name, null)),
+        multiIf(multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') == '1', groupUniqArray(if(b1.is_indicator_one_vote, b1.indicator_name, null)),
+        multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') == '2', groupUniqArray(if(b1.is_indicator_weighted, b1.indicator_name, null)),
         emptyArrayString()) as indicator_scoring_list,
-        multiIf(and(scoring_type == '1', has(groupArray(b1.indicator_one_vote_boolean), 1)),toDecimal64(100, 5), scoring_type == '2', toDecimal64(sum(if(b1.is_indicator_weighted, b1.indicator_weighted_score * b1.indicator_score, null)), 5),0) as score,
+        multiIf(and(multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') == '1', has(groupArray(b1.indicator_one_vote_boolean), 1)),toDecimal64(100, 5), multiIf(has(groupArray(b1.is_indicator_one_vote),1),'1', has(groupArray(b1.is_indicator_weighted), 1),'2','') == '2', toDecimal64(sum(if(b1.is_indicator_weighted, b1.indicator_weighted_score * b1.indicator_score, null)), 5),0) as score,
         toDecimal64(0, 5) as scoring_threshold,
         ['scene_value', 'policy_guarantee', 'network_complaints', 'rival_pre'] as market_guarantee_indicator_list, --市场保障- 场景价值、政策保障、网络投诉、竞对压力
         ['5g_to_4g','5g_terminal_penetration','flow_density'] as indicator_analysis_indicator_list, --指标分析- 5G倒流4G、5G终端渗透率、流量密度
@@ -689,7 +689,7 @@
         and(a1.built_state = '9',  stock_one_name_index), arrayElement(stock_one_level_array, stock_one_name_index),
         and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32()), a1.indicator_level) as is_indicator_one_vote
         from cmdi_pvopp.ads_indoor_grade_level_for_annual_plan_info a1
-        where a1.event_id global in (''
+        where a1.event_id global in (null
         <choose>
             <when test="params.raw.builtStateNewStock == null">
 
