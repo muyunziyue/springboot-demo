@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="/data/api/indoor/weighted_score/ten_level_distribution">
+      select builtState,
+      dataGranularityFirst,
+      dataGranularitySecond,
+      dataGranularityThird,
+      siteNum,
+      notVertRangeOne,
+      notVertRangeTwo,
+      notVertRangeThree,
+      notVertRangeFour,
+      notVertRangeFive,
+      notVertRangeSix,
+      notVertRangeSeven,
+      notVertRangeEight,
+      notVertRangeNine,
+      notVertRangeTen,
+      vertRangeOne,
+      vertRangeTwo,
+      vertRangeThree,
+      vertRangeFour,
+      vertRangeFive,
+      vertRangeSix,
+      vertRangeSeven,
+      vertRangeEight,
+      vertRangeNine,
+      vertRangeTen
+      from (
+      select built_state                                        as builtState,
+      '全国'                                               as dataGranularityFirst,
+      concat('1', '')                                    as orderFirst,
+      ''                                                 as dataGranularitySecond,
+      ''                                                 as orderSecond,
+      ''                                                 as dataGranularityThird,
+      ''                                                 as orderThird,
+      count(1)                                           as siteNum,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as notVertRangeOne,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as notVertRangeTwo,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as notVertRangeThree,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as notVertRangeFour,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as notVertRangeFive,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as notVertRangeSix,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as notVertRangeSeven,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as notVertRangeEight,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as notVertRangeNine,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as notVertRangeTen,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as vertRangeOne,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as vertRangeTwo,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as vertRangeThree,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as vertRangeFour,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as vertRangeFive,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as vertRangeSix,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as vertRangeSeven,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as vertRangeEight,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as vertRangeNine,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as vertRangeTen
+      from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+      where event_id = #{params.raw.id}
+      group by built_state
+      union all
+      select built_state                                        as builtState,
+      '全国'                                               as dataGranularityFirst,
+      concat('1', '')                                    as orderFirst,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">building_site_secondary_cover_scene</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">building_site_secondary_cover_scene</when>
+      </choose> as dataGranularitySecond,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">concat('1', area_type)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">concat('1', area_type)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">concat('1', building_site_secondary_cover_scene)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">concat('1', building_site_secondary_cover_scene)</when>
+      </choose> as orderSecond,
+      ''                                                 as dataGranularityThird,
+      ''                                                 as orderThird,
+      count(1)                                           as siteNum,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as notVertRangeOne,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as notVertRangeTwo,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as notVertRangeThree,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as notVertRangeFour,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as notVertRangeFive,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as notVertRangeSix,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as notVertRangeSeven,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as notVertRangeEight,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as notVertRangeNine,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as notVertRangeTen,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as vertRangeOne,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as vertRangeTwo,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as vertRangeThree,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as vertRangeFour,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as vertRangeFive,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as vertRangeSix,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as vertRangeSeven,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as vertRangeEight,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as vertRangeNine,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as vertRangeTen
+      from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+      where event_id = #{params.raw.id}
+      group by built_state,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">building_site_secondary_cover_scene</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">building_site_secondary_cover_scene</when>
+      </choose>
+      union all
+      select built_state                                        as builtState,
+      province_type                                      as dataGranularityFirst,
+      concat('2', multiIf(
+      province_type = '一类', '1',
+      province_type = '二类', '2',
+      province_type = '三类', '3',
+      province_type = '四类', '4',
+      province_type = '五类', '5',
+      province_type = '六类', '6', '7'))       as orderFirst,
+      ''                                                 as dataGranularitySecond,
+      ''                                                 as orderSecond,
+      ''                                                 as dataGranularityThird,
+      ''                                                 as orderThird,
+      count(1)                                           as siteNum,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as notVertRangeOne,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as notVertRangeTwo,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as notVertRangeThree,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as notVertRangeFour,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as notVertRangeFive,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as notVertRangeSix,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as notVertRangeSeven,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as notVertRangeEight,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as notVertRangeNine,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as notVertRangeTen,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as vertRangeOne,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as vertRangeTwo,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as vertRangeThree,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as vertRangeFour,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as vertRangeFive,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as vertRangeSix,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as vertRangeSeven,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as vertRangeEight,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as vertRangeNine,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as vertRangeTen
+      from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+      where event_id = #{params.raw.id}
+      group by built_state, province_type
+      union all
+      select built_state                                        as builtState,
+      province_type                                      as dataGranularityFirst,
+      concat('2', multiIf(
+      province_type = '一类', '1',
+      province_type = '二类', '2',
+      province_type = '三类', '3',
+      province_type = '四类', '4',
+      province_type = '五类', '5',
+      province_type = '六类', '6', '7'))       as orderFirst,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">building_site_secondary_cover_scene</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">building_site_secondary_cover_scene</when>
+      </choose> as dataGranularitySecond,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">concat('1', area_type)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">concat('1', area_type)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">concat('1', building_site_secondary_cover_scene)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">concat('1', building_site_secondary_cover_scene)</when>
+      </choose> as orderSecond,
+      ''                                                 as dataGranularityThird,
+      ''                                                 as orderThird,
+      count(1)                                           as siteNum,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as notVertRangeOne,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as notVertRangeTwo,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as notVertRangeThree,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as notVertRangeFour,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as notVertRangeFive,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as notVertRangeSix,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as notVertRangeSeven,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as notVertRangeEight,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as notVertRangeNine,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as notVertRangeTen,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as vertRangeOne,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as vertRangeTwo,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as vertRangeThree,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as vertRangeFour,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as vertRangeFive,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as vertRangeSix,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as vertRangeSeven,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as vertRangeEight,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as vertRangeNine,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as vertRangeTen
+      from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+      where event_id = #{params.raw.id}
+      group by built_state,
+      province_type,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">building_site_secondary_cover_scene</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">building_site_secondary_cover_scene</when>
+      </choose>
+      union all
+      select built_state                                        as builtState,
+      province_type                                      as dataGranularityFirst,
+      concat('2', multiIf(
+      province_type = '一类', '1',
+      province_type = '二类', '2',
+      province_type = '三类', '3',
+      province_type = '四类', '4',
+      province_type = '五类', '5',
+      province_type = '六类', '6', '7'))       as orderFirst,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">citys_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">citys_name</when>
+      </choose> as dataGranularitySecond,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">concat('2', any(toString(province_order)))</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">concat('2', any(toString(citys_order)))</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">concat('2', any(toString(province_order)))</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">concat('2', any(toString(citys_order)))</when>
+      </choose> as orderSecond,
+      ''                                                 as dataGranularityThird,
+      ''                                                 as orderThird,
+      count(1)                                           as siteNum,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as notVertRangeOne,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as notVertRangeTwo,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as notVertRangeThree,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as notVertRangeFour,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as notVertRangeFive,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as notVertRangeSix,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as notVertRangeSeven,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as notVertRangeEight,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as notVertRangeNine,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as notVertRangeTen,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as vertRangeOne,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as vertRangeTwo,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as vertRangeThree,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as vertRangeFour,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as vertRangeFive,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as vertRangeSix,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as vertRangeSeven,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as vertRangeEight,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as vertRangeNine,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as vertRangeTen
+      from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+      where event_id = #{params.raw.id}
+      group by built_state,
+      province_type,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">citys_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">citys_name</when>
+      </choose>
+      union all
+      select built_state                                        as builtState,
+      province_type                                      as dataGranularityFirst,
+      concat('2', multiIf(
+      province_type = '一类', '1',
+      province_type = '二类', '2',
+      province_type = '三类', '3',
+      province_type = '四类', '4',
+      province_type = '五类', '5',
+      province_type = '六类', '6', '7'))       as orderFirst,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">citys_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">citys_name</when>
+      </choose> as dataGranularitySecond,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">concat('2', any(toString(province_order)))</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">concat('2', any(toString(citys_order)))</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">concat('2', any(toString(province_order)))</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">concat('2', any(toString(citys_order)))</when>
+      </choose> as orderSecond,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">building_site_secondary_cover_scene</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">building_site_secondary_cover_scene</when>
+      </choose> as dataGranularityThird,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">concat('1', area_type)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">concat('1', area_type)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">concat('1', building_site_secondary_cover_scene)</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">concat('1', building_site_secondary_cover_scene)</when>
+      </choose> as orderThird,
+      count(1)                                           as siteNum,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as notVertRangeOne,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as notVertRangeTwo,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as notVertRangeThree,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as notVertRangeFour,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as notVertRangeFive,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as notVertRangeSix,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as notVertRangeSeven,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as notVertRangeEight,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as notVertRangeNine,
+      count(if(and(and(not isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as notVertRangeTen,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as vertRangeOne,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as vertRangeTwo,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as vertRangeThree,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as vertRangeFour,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as vertRangeFive,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as vertRangeSix,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as vertRangeSeven,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as vertRangeEight,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as vertRangeNine,
+      count(if(and(and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as vertRangeTen
+      from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+      where event_id = #{params.raw.id}
+      group by built_state,
+      province_type,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">citys_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">province_name</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">citys_name</when>
+      </choose>,
+      <choose>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '1'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '2'.toString() ">area_type</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '3'.toString() ">building_site_secondary_cover_scene</when>
+        <when test="params.raw.dataGranularityType !=null and params.raw.dataGranularityType == '4'.toString() ">building_site_secondary_cover_scene</when>
+      </choose>
+      )
+      order by builtState, orderFirst, orderSecond, orderThird
+    </select>
+</mapper>
