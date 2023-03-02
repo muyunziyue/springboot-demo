@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="/data/api/indoor/weighted_score/pass_audit_site_num">
+        select count(if(is_high_value_by_score == '1', 1,null)) as passAuditSiteNum
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+        where event_id = #{params.raw.id}
+    </select>
+</mapper>

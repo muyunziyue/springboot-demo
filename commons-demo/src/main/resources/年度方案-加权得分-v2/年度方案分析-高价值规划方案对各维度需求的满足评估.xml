@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.test.Test">
+    <select id="/data/api/indoor/weighted_score/satisfaction_evaluation">
+        select a1.indicatorType
+            ,a1.indicatorName
+            ,a1.stockIndicatorWeightOneVote
+            ,a1.stockIndicatorWeightWeight
+            ,a1.stockFirstLevel
+            ,a1.stockSecondLevel
+            ,a1.stockThirdLevel
+            ,a1.stockFourthLevel
+            ,a1.stockFifthLevel
+            ,a1.newStockIndicatorWeightOneVote
+            ,a1.newStockIndicatorWeightWeight
+            ,a1.newStockFirstLevel
+            ,a1.newStockSecondLevel
+            ,a1.newStockThirdLevel
+            ,a1.newStockFourthLevel
+            ,a1.newStockFifthLevel
+            ,a1.newNewIndicatorWeightOneVote
+            ,a1.newNewIndicatorWeightWeight
+            ,a1.newNewFirstLevel
+            ,a1.newNewSecondLevel
+            ,a1.newNewThirdLevel
+            ,a1.newNewFourthLevel
+            ,a1.newNewFifthLevel
+        from (
+              select '附加维度'   as indicatorType
+                   , indicator0_name   as indicatorName
+                   , max(multiIf(built_state = '9', indicator0_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                   , max(multiIf(built_state = '9', indicator0_weight , null)) as stockIndicatorWeightWeight
+                   , max(multiIf(built_state = '10', indicator0_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                   , max(multiIf(built_state = '10', indicator0_weight , null)) as newStockIndicatorWeightWeight
+                   , max(multiIf(built_state = '11', indicator0_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                   , max(multiIf(built_state = '11', indicator0_weight , null)) as newNewIndicatorWeightWeight
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator0_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator0_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                   , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator0_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+              from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+              where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator0_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator1_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator1_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator1_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator1_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator1_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator1_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator1_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator1_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator1_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator1_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator1_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator2_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator2_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator2_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator2_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator2_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator2_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator2_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator2_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator2_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator2_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator2_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator3_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator3_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator3_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator3_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator3_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator3_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator3_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator3_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator3_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator3_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator3_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator4_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator4_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator4_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator4_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator4_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator4_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator4_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator4_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator4_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator4_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator4_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator5_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator5_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator5_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator5_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator5_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator5_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator5_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator5_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator5_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator5_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator5_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator6_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator6_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator6_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator6_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator6_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator6_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator6_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator6_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator6_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator6_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator6_name
+                union all
+                select '业务需求'   as indicatorType
+                , indicator7_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator7_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator7_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator7_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator7_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator7_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator7_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator7_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator7_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator7_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator7_name
+                union all
+                select '投资效益'   as indicatorType
+                , indicator8_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator8_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator8_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator8_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator8_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator8_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator8_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator8_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator8_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator8_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator8_name
+                union all
+                select '覆盖需求'   as indicatorType
+                , indicator9_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator9_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator9_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator9_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator9_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator9_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator9_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator9_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator9_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator9_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator9_name
+                union all
+                select '覆盖需求'   as indicatorType
+                , indicator10_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator10_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator10_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator10_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator10_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator10_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator10_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator10_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator10_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator10_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator10_name
+                union all
+                select '覆盖需求'   as indicatorType
+                , indicator11_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator11_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator11_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator11_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator11_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator11_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator11_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator11_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator11_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator11_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator11_name
+                union all
+                select '附加维度'   as indicatorType
+                , indicator12_name   as indicatorName
+                , max(multiIf(built_state = '9', indicator12_weight_by_one_vote_through , null))  as stockIndicatorWeightOneVote
+                , max(multiIf(built_state = '9', indicator12_weight , null)) as stockIndicatorWeightWeight
+                , max(multiIf(built_state = '10', indicator12_weight_by_one_vote_through , null)) as newStockIndicatorWeightOneVote
+                , max(multiIf(built_state = '10', indicator12_weight , null)) as newStockIndicatorWeightWeight
+                , max(multiIf(built_state = '11', indicator12_weight_by_one_vote_through , null)) as newNewIndicatorWeightOneVote
+                , max(multiIf(built_state = '11', indicator12_weight , null)) as newNewIndicatorWeightWeight
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 1), 1, null)), 2)) as stockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 2), 1, null)), 2)) as stockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 3), 1, null)), 2)) as stockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 4), 1, null)), 2)) as stockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '9', indicator12_grade_level = 5), 1, null)), 2)) as stockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 1), 1, null)), 2)) as newStockFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 2), 1, null)), 2)) as newStockSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 3), 1, null)), 2)) as newStockThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 4), 1, null)), 2)) as newStockFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '10', indicator12_grade_level = 5), 1, null)), 2)) as newStockFifthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 1, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 1), 1, null)), 2)) as newNewFirstLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 2, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 2), 1, null)), 2)) as newNewSecondLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 3, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 3), 1, null)), 2)) as newNewThirdLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 4, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 4), 1, null)), 2)) as newNewFourthLevel
+                , intDivOrZero(toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 5, is_high_value_by_score = '1'), 1, null)), 2) * 100, toDecimal64(count(multiIf(and(built_state = '11', indicator12_grade_level = 5), 1, null)), 2)) as newNewFifthLevel
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
+                where event_id =#{params.raw.id} and indicatorName <![CDATA[ <> ]]> ''
+                group by indicator12_name
+        ) a1
+    </select>
+</mapper>
