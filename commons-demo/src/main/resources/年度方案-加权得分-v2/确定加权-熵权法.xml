@@ -34,6 +34,7 @@
                     </foreach>
                     ) c1
               ) d1
+        where d1.indicator_name != ''
         SETTINGS allow_experimental_window_functions = 1
     </select>
 </mapper>
