@@ -721,16 +721,15 @@
                 and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32())), null
         ) as indicator_weight_by_one_vote_through
         from cmdi_pvopp.ads_indoor_grade_level_for_annual_plan_info a1
-        where a1.event_id global in (null
+        where (a1.event_id  is null)
         <choose>
-            <when test="params.raw.builtStateNewStock == null">
-
-            </when>
+            <when test="params.raw.builtStateNewStock == null"></when>
             <when test="params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">
-                ,
+            or (a1.event_id  global in (
                 <foreach collection="params.raw.builtStateNewStock.oneVoteThroughPool" item="item" separator="," close="" open="">
                     #{item.indicatorGradeId}
                 </foreach>
+                ) and built_state = '10')
             </when>
             <otherwise>
             </otherwise>
@@ -739,10 +738,11 @@
             <when test="params.raw.builtStateNewStock == null">
             </when>
             <when test="params.raw.builtStateNewStock.weightPool != null and params.raw.builtStateNewStock.weightPool.size() > 0">
-                ,
+                or (a1.event_id  global in (
                 <foreach collection="params.raw.builtStateNewStock.weightPool" item="item" separator="," close="" open="">
                     #{item.indicatorGradeId}
                 </foreach>
+                ) and built_state = '10')
             </when>
             <otherwise>
             </otherwise>
@@ -751,10 +751,11 @@
             <when test="params.raw.builtStateNewNew == null">
             </when>
             <when test="params.raw.builtStateNewNew.oneVoteThroughPool != null and params.raw.builtStateNewNew.oneVoteThroughPool.size() > 0">
-                ,
+                or (a1.event_id  global in (
                 <foreach collection="params.raw.builtStateNewNew.oneVoteThroughPool" item="item" separator="," close="" open="">
                     #{item.indicatorGradeId}
                 </foreach>
+                ) and built_state = '11')
             </when>
             <otherwise>
             </otherwise>
@@ -764,10 +765,11 @@
 
             </when>
             <when test="params.raw.builtStateNewNew.weightPool != null and params.raw.builtStateNewNew.weightPool.size() > 0">
-                ,
+                or (a1.event_id  global in (
                 <foreach collection="params.raw.builtStateNewNew.weightPool" item="item" separator="," close="" open="">
                     #{item.indicatorGradeId}
                 </foreach>
+                ) and built_state = '11')
             </when>
             <otherwise>
             </otherwise>
@@ -777,10 +779,11 @@
 
             </when>
             <when test="params.raw.builtStateStock.oneVoteThroughPool != null and params.raw.builtStateStock.oneVoteThroughPool.size() > 0">
-                ,
+                or (a1.event_id  global in (
                 <foreach collection="params.raw.builtStateStock.oneVoteThroughPool" item="item" separator="," close="" open="">
                     #{item.indicatorGradeId}
                 </foreach>
+                ) and built_state = '9')
             </when>
             <otherwise>
             </otherwise>
@@ -789,15 +792,15 @@
             <when test="params.raw.builtStateStock == null">
             </when>
             <when test="params.raw.builtStateStock.weightPool != null and params.raw.builtStateStock.weightPool.size() > 0">
-                ,
+                or (a1.event_id  global in (
                 <foreach collection="params.raw.builtStateStock.weightPool" item="item" separator="," close="" open="">
                     #{item.indicatorGradeId}
                 </foreach>
+                ) and built_state = '9')
             </when>
             <otherwise>
             </otherwise>
         </choose>
-        )
         )  b1
         group by b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_id
     </insert>
