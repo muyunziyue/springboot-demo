@@ -4,653 +4,367 @@
     <update id="/data/api/indoor/weighted_score/audit_threshold">
         alter table cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info_local on cluster default
         update is_high_value_by_score =
-        multiIf(0, is_high_value_by_score
-        <choose>
-            <when test="params.raw.builtStateNewStockNotVert != null ">
-                ,
+        multiIf(
+        <foreach collection="params.raw.thresholdSetting " item="item1" separator=",">
                 <choose>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '10'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and(built_state = '10', not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                        not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                    </when>
+                                    <when test="item1.vertType == '1'.toString() ">
+                                        and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                    </when>
+                                    <when test="item1.vertType == '2'.toString() ">
+                                        1
+                                    </when>
+                                </choose>
+                                ),
+                                toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '11'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '12'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '13'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , citys_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '20'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , building_site_secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '21'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '22'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , area_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '23'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , concat(province_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
+                    <when test="item1.thresholdType == '24'.toString() ">
+                        <foreach collection="item1.auditThreshold"
                                  item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
+                            and(
+                            built_state = '${item1.builtState}',
+                            <choose>
+                                <when test="item1.vertType == '0'.toString()">
+                                    not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '1'.toString() ">
+                                    and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                                </when>
+                                <when test="item1.vertType == '2'.toString() ">
+                                    1
+                                </when>
+                            </choose>
+                            , concat(citys_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
                         </foreach>
                     </when>
                     <otherwise>
                         0, is_high_value_by_score
                     </otherwise>
                 </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewStockVert != null ">
-                ,
-                <choose>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and(built_state = '10', and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, is_high_value_by_score
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-
-            <when test="params.raw.builtStateStock != null ">
-                ,
-                <choose>
-                    <when test="params.raw.builtStateStock.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            built_state = '9', toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', citys_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', building_site_secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', area_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', concat(province_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', concat(citys_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, is_high_value_by_score
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewNewNotVert != null ">
-                ,
-                <choose>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and(built_state = '11', not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, is_high_value_by_score
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewNewVert != null ">
-                ,
-                <choose>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and(built_state = '11', and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toString(score>= toDecimal64(#{item.threshold}, 5))
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, is_high_value_by_score
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
+        </foreach>
         , '')
-        ,scoring_threshold = multiIf(0, scoring_threshold
-        <choose>
-            <when test="params.raw.builtStateNewStockNotVert != null ">
-                ,
-                <choose>
-
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''),  '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockNotVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, scoring_threshold
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewStockVert != null ">
-                ,
-                <choose>
-
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''),  '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewStockVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewStockVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '10',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, scoring_threshold
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateStock != null ">
-                ,
-                <choose>
-
-                    <when test="params.raw.builtStateStock.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9',  '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', province == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', citys_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', building_site_secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', area_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', concat(province_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateStock.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateStock.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '9', concat(citys_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, scoring_threshold
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewNewNotVert != null">
-                ,
-                <choose>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''),  '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewNotVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewNotVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, scoring_threshold
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
-        <choose>
-            <when test="params.raw.builtStateNewNewVert != null">
-                ,
-                <choose>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '10'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''),  '全国'== #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '11'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '12'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), province == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '13'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), citys_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '20'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), building_site_secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '21'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '22'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), area_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '23'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(province_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <when test="params.raw.builtStateNewNewVert.thresholdType == '24'.toString() ">
-                        <foreach collection="params.raw.builtStateNewNewVert.auditThreshold"
-                                 item="item" separator="," open="" close="">
-                            and (built_state = '11',and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> ''), concat(citys_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
-                        </foreach>
-                    </when>
-                    <otherwise>
-                        0, scoring_threshold
-                    </otherwise>
-                </choose>
-            </when>
-        </choose>
+        ,scoring_threshold = multiIf(
+        <foreach collection="params.raw.thresholdSetting " item="item1" separator=",">
+            <choose>
+                <when test="item1.thresholdType == '10'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        ),
+                        toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '11'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , province_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '12'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , province == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '13'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , citys_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '20'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , building_site_secondary_cover_scene == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '21'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , concat(province_type,'-',building_site_secondary_cover_scene) == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '22'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , area_type == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '23'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , concat(province_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <when test="item1.thresholdType == '24'.toString() ">
+                    <foreach collection="item1.auditThreshold"
+                             item="item" separator="," open="" close="">
+                        and(
+                        built_state = '${item1.builtState}',
+                        <choose>
+                            <when test="item1.vertType == '0'.toString()">
+                                not and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '1'.toString() ">
+                                and(isNotNull(vert_ind_dem), vert_ind_dem <![CDATA[ <> ]]> '')
+                            </when>
+                            <when test="item1.vertType == '2'.toString() ">
+                                1
+                            </when>
+                        </choose>
+                        , concat(citys_type,'-',area_type) == #{item.type}), toDecimal64(#{item.threshold}, 2)
+                    </foreach>
+                </when>
+                <otherwise>
+                    0, is_high_value_by_score
+                </otherwise>
+            </choose>
+        </foreach>
         , null)
     where event_id = #{params.raw.id}
     </update>
