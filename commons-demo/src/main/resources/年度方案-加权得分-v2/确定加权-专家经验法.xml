@@ -721,7 +721,7 @@
                 and(a1.built_state = '11',  new_new_one_name_index), arrayElement(new_new_one_level_array, new_new_one_name_index), emptyArrayInt32())), null
         ) as indicator_weight_by_one_vote_through
         from cmdi_pvopp.ads_indoor_grade_level_for_annual_plan_info a1
-        where (a1.event_id  is null)
+        where (1!=1)
         <choose>
             <when test="params.raw.builtStateNewStock == null"></when>
             <when test="params.raw.builtStateNewStock.oneVoteThroughPool != null and params.raw.builtStateNewStock.oneVoteThroughPool.size() > 0">

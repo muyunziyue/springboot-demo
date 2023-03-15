@@ -28,7 +28,7 @@
                                               , built_state
                                               , sum(indicator_level) over () as indicator_level_sum --对指标等级进行求和
                                          from cmdi_pvopp.ads_indoor_grade_level_for_annual_plan_info
-                                         where event_id = #{item.indicatorGradeId} and built_state = #{item.builtState} and indicator_level is not null
+                                         where event_id = #{item.indicatorGradeId} and built_state = #{item.builtState}
                                       ) a1
                               ) b1
                     </foreach>
