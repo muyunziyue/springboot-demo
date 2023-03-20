@@ -211,7 +211,8 @@
            dwd_indoor_site_bom_plan_match_for_annual_plan_info_id,
            dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
            create_time,
-           last_update_time)
+           last_update_time,
+           frequency_5g)
         select upper(replaceAll(CAST(generateUUIDv4(), 'String'), '-', '')) as id,
         any(b1.site_type) as site_type,
         any(b1.built_state) as built_state,
@@ -426,7 +427,8 @@
         b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_id,
         any(b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id) as dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
         now() as create_time,
-        now() as last_update_time
+        now() as last_update_time,
+        any(b1.frequency_5g) as frequency_5g
         from (
         select a1.id as aid,
         a1.site_type,
@@ -501,6 +503,7 @@
         a1.indicator_score,
         a1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_id,
         a1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
+        a1.frequency_5g,
         indexOf(cast(
         <choose>
             <when test="params.raw.builtStateNewStock ==null ">
