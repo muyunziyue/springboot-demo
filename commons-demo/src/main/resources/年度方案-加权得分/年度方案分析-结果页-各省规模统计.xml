@@ -6,12 +6,12 @@
 --http://192.1681.64:8088
 select province as province,
        any(province_name) as provinceName,
-       count(if(built_state = '10', 1, null)) as newStockSiteNum,
-       count(if(and(built_state = '10', is_high_value_by_score == '1'), 1, null)) as newStockPassAuditSiteNum,
-       count(if(built_state = '11', 1, null)) as newNewSiteNum,
-       count(if(and(built_state = '11', is_high_value_by_score == '1'), 1, null)) as newNewPassAuditSiteNum,
-       intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1, null)), 4), count()) * 100 as passAuditRatio
-from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+       sum(if(built_state = '10', bs_num_5g, 0)) as newStockSiteNum,
+       sum(if(and(built_state = '10', is_high_value_by_score == '1'), bs_num_5g, 0)) as newStockPassAuditSiteNum,
+       sum(if(built_state = '11', bs_num_5g, 0)) as newNewSiteNum,
+       sum(if(and(built_state = '11', is_high_value_by_score == '1'), bs_num_5g, 0)) as newNewPassAuditSiteNum,
+       intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g, 0)), 4), ifNull(sum(bs_num_5g), 0) ) * 100 as passAuditRatio
+from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
 where event_id = #{params.raw.id}
 group by province
 

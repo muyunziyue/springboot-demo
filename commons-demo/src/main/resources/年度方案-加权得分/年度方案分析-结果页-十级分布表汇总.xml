@@ -25,42 +25,42 @@ from (
              ''                                                 as orderSecond,
              ''                                                 as dataGranularityThird,
              ''                                                 as orderThird,
-             count(1)                                           as siteNum,
-             count(if(and(score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as rangeOne,
-        count(if(and(score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as rangeTwo,
-        count(if(and(score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as rangeThree,
-        count(if(and(score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as rangeFour,
-        count(if(and(score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as rangeFive,
-        count(if(and(score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as rangeSix,
-        count(if(and(score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as rangeSeven,
-        count(if(and(score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as rangeEight,
-        count(if(and(score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as rangeNine,
-        count(if(and(score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as rangeTen
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+             ifNull(sum(bs_num_5g), 0)                                           as siteNum,
+             sum(if(and(score >= 0, score <![CDATA[ < ]]> 10), bs_num_5g, 0))    as rangeOne,
+            sum(if(and(score >= 10, score <![CDATA[ < ]]> 20), bs_num_5g, 0))   as rangeTwo,
+            sum(if(and(score >= 20, score <![CDATA[ < ]]> 30), bs_num_5g, 0))   as rangeThree,
+            sum(if(and(score >= 30, score <![CDATA[ < ]]> 40), bs_num_5g, 0))   as rangeFour,
+            sum(if(and(score >= 40, score <![CDATA[ < ]]> 50), bs_num_5g, 0))   as rangeFive,
+            sum(if(and(score >= 50, score <![CDATA[ < ]]> 60), bs_num_5g, 0))   as rangeSix,
+            sum(if(and(score >= 60, score <![CDATA[ < ]]> 70), bs_num_5g, 0))   as rangeSeven,
+            sum(if(and(score >= 70, score <![CDATA[ < ]]> 80), bs_num_5g, 0))   as rangeEight,
+            sum(if(and(score >= 80, score <![CDATA[ < ]]> 90), bs_num_5g, 0))   as rangeNine,
+            sum(if(and(score >= 90, score <![CDATA[ <= ]]> 100), bs_num_5g, 0)) as rangeTen
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
         group by built_state
         union all
         select built_state                                        as builtState,
         '全国'                                               as dataGranularityFirst,
         concat('1', '')                                    as orderFirst,
-        secondary_cover_scene                              as dataGranularitySecond,
-        concat('1', secondary_cover_scene)                 as orderSecond,
+        building_site_secondary_cover_scene                              as dataGranularitySecond,
+        concat('1', building_site_secondary_cover_scene)                 as orderSecond,
         ''                                                 as dataGranularityThird,
         ''                                                 as orderThird,
-        count(1)                                           as siteNum,
-        count(if(and(score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as rangeOne,
-        count(if(and(score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as rangeTwo,
-        count(if(and(score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as rangeThree,
-        count(if(and(score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as rangeFour,
-        count(if(and(score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as rangeFive,
-        count(if(and(score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as rangeSix,
-        count(if(and(score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as rangeSeven,
-        count(if(and(score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as rangeEight,
-        count(if(and(score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as rangeNine,
-        count(if(and(score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as rangeTen
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        ifNull(sum(bs_num_5g), 0)                                           as siteNum,
+        sum(if(and(score >= 0, score <![CDATA[ < ]]> 10), bs_num_5g, 0))    as rangeOne,
+        sum(if(and(score >= 10, score <![CDATA[ < ]]> 20), bs_num_5g, 0))   as rangeTwo,
+        sum(if(and(score >= 20, score <![CDATA[ < ]]> 30), bs_num_5g, 0))   as rangeThree,
+        sum(if(and(score >= 30, score <![CDATA[ < ]]> 40), bs_num_5g, 0))   as rangeFour,
+        sum(if(and(score >= 40, score <![CDATA[ < ]]> 50), bs_num_5g, 0))   as rangeFive,
+        sum(if(and(score >= 50, score <![CDATA[ < ]]> 60), bs_num_5g, 0))   as rangeSix,
+        sum(if(and(score >= 60, score <![CDATA[ < ]]> 70), bs_num_5g, 0))   as rangeSeven,
+        sum(if(and(score >= 70, score <![CDATA[ < ]]> 80), bs_num_5g, 0))   as rangeEight,
+        sum(if(and(score >= 80, score <![CDATA[ < ]]> 90), bs_num_5g, 0))   as rangeNine,
+        sum(if(and(score >= 90, score <![CDATA[ <= ]]> 100), bs_num_5g, 0)) as rangeTen
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
-        group by built_state, secondary_cover_scene
+        group by built_state, building_site_secondary_cover_scene
         union all
         select built_state                                        as builtState,
         province_type                                      as dataGranularityFirst,
@@ -75,18 +75,18 @@ from (
         ''                                                 as orderSecond,
         ''                                                 as dataGranularityThird,
         ''                                                 as orderThird,
-        count(1)                                           as siteNum,
-        count(if(and(score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as rangeOne,
-        count(if(and(score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as rangeTwo,
-        count(if(and(score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as rangeThree,
-        count(if(and(score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as rangeFour,
-        count(if(and(score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as rangeFive,
-        count(if(and(score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as rangeSix,
-        count(if(and(score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as rangeSeven,
-        count(if(and(score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as rangeEight,
-        count(if(and(score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as rangeNine,
-        count(if(and(score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as rangeTen
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        ifNull(sum(bs_num_5g), 0)                                           as siteNum,
+        sum(if(and(score >= 0, score <![CDATA[ < ]]> 10), bs_num_5g, 0))    as rangeOne,
+        sum(if(and(score >= 10, score <![CDATA[ < ]]> 20), bs_num_5g, 0))   as rangeTwo,
+        sum(if(and(score >= 20, score <![CDATA[ < ]]> 30), bs_num_5g, 0))   as rangeThree,
+        sum(if(and(score >= 30, score <![CDATA[ < ]]> 40), bs_num_5g, 0))   as rangeFour,
+        sum(if(and(score >= 40, score <![CDATA[ < ]]> 50), bs_num_5g, 0))   as rangeFive,
+        sum(if(and(score >= 50, score <![CDATA[ < ]]> 60), bs_num_5g, 0))   as rangeSix,
+        sum(if(and(score >= 60, score <![CDATA[ < ]]> 70), bs_num_5g, 0))   as rangeSeven,
+        sum(if(and(score >= 70, score <![CDATA[ < ]]> 80), bs_num_5g, 0))   as rangeEight,
+        sum(if(and(score >= 80, score <![CDATA[ < ]]> 90), bs_num_5g, 0))   as rangeNine,
+        sum(if(and(score >= 90, score <![CDATA[ <= ]]> 100), bs_num_5g, 0)) as rangeTen
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
         group by built_state, province_type
         union all
@@ -99,24 +99,24 @@ from (
         province_type = '四类', '4',
         province_type = '五类', '5',
         province_type = '六类', '6', '7'))       as orderFirst,
-        secondary_cover_scene                              as dataGranularitySecond,
-        concat('1', secondary_cover_scene)                 as orderSecond,
+        building_site_secondary_cover_scene                              as dataGranularitySecond,
+        concat('1', building_site_secondary_cover_scene)                 as orderSecond,
         ''                                                 as dataGranularityThird,
         ''                                                 as orderThird,
-        count(1)                                           as siteNum,
-        count(if(and(score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as rangeOne,
-        count(if(and(score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as rangeTwo,
-        count(if(and(score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as rangeThree,
-        count(if(and(score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as rangeFour,
-        count(if(and(score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as rangeFive,
-        count(if(and(score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as rangeSix,
-        count(if(and(score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as rangeSeven,
-        count(if(and(score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as rangeEight,
-        count(if(and(score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as rangeNine,
-        count(if(and(score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as rangeTen
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        ifNull(sum(bs_num_5g), 0)                                           as siteNum,
+        sum(if(and(score >= 0, score <![CDATA[ < ]]> 10), bs_num_5g, 0))    as rangeOne,
+        sum(if(and(score >= 10, score <![CDATA[ < ]]> 20), bs_num_5g, 0))   as rangeTwo,
+        sum(if(and(score >= 20, score <![CDATA[ < ]]> 30), bs_num_5g, 0))   as rangeThree,
+        sum(if(and(score >= 30, score <![CDATA[ < ]]> 40), bs_num_5g, 0))   as rangeFour,
+        sum(if(and(score >= 40, score <![CDATA[ < ]]> 50), bs_num_5g, 0))   as rangeFive,
+        sum(if(and(score >= 50, score <![CDATA[ < ]]> 60), bs_num_5g, 0))   as rangeSix,
+        sum(if(and(score >= 60, score <![CDATA[ < ]]> 70), bs_num_5g, 0))   as rangeSeven,
+        sum(if(and(score >= 70, score <![CDATA[ < ]]> 80), bs_num_5g, 0))   as rangeEight,
+        sum(if(and(score >= 80, score <![CDATA[ < ]]> 90), bs_num_5g, 0))   as rangeNine,
+        sum(if(and(score >= 90, score <![CDATA[ <= ]]> 100), bs_num_5g, 0)) as rangeTen
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
-        group by built_state, province_type, secondary_cover_scene
+        group by built_state, province_type, building_site_secondary_cover_scene
         union all
         select built_state                                        as builtState,
         province_type                                      as dataGranularityFirst,
@@ -131,18 +131,18 @@ from (
         concat('2', any(toString(province_order)))         as orderSecond,
         ''                                                 as dataGranularityThird,
         ''                                                 as orderThird,
-        count(1)                                           as siteNum,
-        count(if(and(score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as rangeOne,
-        count(if(and(score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as rangeTwo,
-        count(if(and(score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as rangeThree,
-        count(if(and(score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as rangeFour,
-        count(if(and(score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as rangeFive,
-        count(if(and(score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as rangeSix,
-        count(if(and(score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as rangeSeven,
-        count(if(and(score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as rangeEight,
-        count(if(and(score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as rangeNine,
-        count(if(and(score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as rangeTen
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        ifNull(sum(bs_num_5g), 0)                                           as siteNum,
+        sum(if(and(score >= 0, score <![CDATA[ < ]]> 10), bs_num_5g, 0))    as rangeOne,
+        sum(if(and(score >= 10, score <![CDATA[ < ]]> 20), bs_num_5g, 0))   as rangeTwo,
+        sum(if(and(score >= 20, score <![CDATA[ < ]]> 30), bs_num_5g, 0))   as rangeThree,
+        sum(if(and(score >= 30, score <![CDATA[ < ]]> 40), bs_num_5g, 0))   as rangeFour,
+        sum(if(and(score >= 40, score <![CDATA[ < ]]> 50), bs_num_5g, 0))   as rangeFive,
+        sum(if(and(score >= 50, score <![CDATA[ < ]]> 60), bs_num_5g, 0))   as rangeSix,
+        sum(if(and(score >= 60, score <![CDATA[ < ]]> 70), bs_num_5g, 0))   as rangeSeven,
+        sum(if(and(score >= 70, score <![CDATA[ < ]]> 80), bs_num_5g, 0))   as rangeEight,
+        sum(if(and(score >= 80, score <![CDATA[ < ]]> 90), bs_num_5g, 0))   as rangeNine,
+        sum(if(and(score >= 90, score <![CDATA[ <= ]]> 100), bs_num_5g, 0)) as rangeTen
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
         group by built_state, province_type, province_name
         union all
@@ -157,22 +157,22 @@ from (
         province_type = '六类', '6', '7'))       as orderFirst,
         province_name                                      as dataGranularitySecond,
         concat('2', any(toString(province_order)))         as orderSecond,
-        secondary_cover_scene                              as dataGranularityThird,
-        concat('1', secondary_cover_scene)                 as orderThird,
-        count(1)                                           as siteNum,
-        count(if(and(score >= 0, score <![CDATA[ < ]]> 10), 1, null))    as rangeOne,
-        count(if(and(score >= 10, score <![CDATA[ < ]]> 20), 1, null))   as rangeTwo,
-        count(if(and(score >= 20, score <![CDATA[ < ]]> 30), 1, null))   as rangeThree,
-        count(if(and(score >= 30, score <![CDATA[ < ]]> 40), 1, null))   as rangeFour,
-        count(if(and(score >= 40, score <![CDATA[ < ]]> 50), 1, null))   as rangeFive,
-        count(if(and(score >= 50, score <![CDATA[ < ]]> 60), 1, null))   as rangeSix,
-        count(if(and(score >= 60, score <![CDATA[ < ]]> 70), 1, null))   as rangeSeven,
-        count(if(and(score >= 70, score <![CDATA[ < ]]> 80), 1, null))   as rangeEight,
-        count(if(and(score >= 80, score <![CDATA[ < ]]> 90), 1, null))   as rangeNine,
-        count(if(and(score >= 90, score <![CDATA[ <= ]]> 100), 1, null)) as rangeTen
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        building_site_secondary_cover_scene                              as dataGranularityThird,
+        concat('1', building_site_secondary_cover_scene)                 as orderThird,
+        ifNull(sum(bs_num_5g), 0)                                           as siteNum,
+        sum(if(and(score >= 0, score <![CDATA[ < ]]> 10), bs_num_5g, 0))    as rangeOne,
+        sum(if(and(score >= 10, score <![CDATA[ < ]]> 20), bs_num_5g, 0))   as rangeTwo,
+        sum(if(and(score >= 20, score <![CDATA[ < ]]> 30), bs_num_5g, 0))   as rangeThree,
+        sum(if(and(score >= 30, score <![CDATA[ < ]]> 40), bs_num_5g, 0))   as rangeFour,
+        sum(if(and(score >= 40, score <![CDATA[ < ]]> 50), bs_num_5g, 0))   as rangeFive,
+        sum(if(and(score >= 50, score <![CDATA[ < ]]> 60), bs_num_5g, 0))   as rangeSix,
+        sum(if(and(score >= 60, score <![CDATA[ < ]]> 70), bs_num_5g, 0))   as rangeSeven,
+        sum(if(and(score >= 70, score <![CDATA[ < ]]> 80), bs_num_5g, 0))   as rangeEight,
+        sum(if(and(score >= 80, score <![CDATA[ < ]]> 90), bs_num_5g, 0))   as rangeNine,
+        sum(if(and(score >= 90, score <![CDATA[ <= ]]> 100), bs_num_5g, 0)) as rangeTen
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
-        group by built_state, province_type, province_name, secondary_cover_scene
+        group by built_state, province_type, province_name, building_site_secondary_cover_scene
         )
         order by builtState, orderFirst, orderSecond, orderThird
     </select>

@@ -29,47 +29,47 @@
                ''                                      as orderThird,
                groupUniqArray(if(built_state == '10',scoring_threshold, null)) as newStockScoringThresholdArray,
                groupUniqArray(if(built_state == '11',scoring_threshold, null)) as newNewScoringThresholdArray,
-               count(1)                                as siteNum,
-               count(if(built_state == '10', 1, null)) as newStockSiteNum,
-               count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+               ifNull(sum(bs_num_5g), 0)                                as siteNum,
+               sum(if(built_state == '10', bs_num_5g, 0)) as newStockSiteNum,
+               sum(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaSiteNum,
                if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                  as newStockScoringThreshold,
-        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
-        count(if(built_state == '11', 1, null)) as newNewSiteNum,
-        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
-               if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
-        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
-        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+                sum(if(and(built_state == '10',is_high_value_by_score == '1'), bs_num_5g, 0))     as newStockPassAuditSiteNum,
+                sum(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaAndPassAuditSiteNum,
+                sum(if(built_state == '11', bs_num_5g, 0)) as newNewSiteNum,
+                sum(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaSiteNum,
+                       if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
+                sum(if(and(built_state == '11',is_high_value_by_score == '1'), bs_num_5g, 0))     as newNewPassAuditSiteNum,
+                sum(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaAndPassAuditSiteNum,
+                intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g , 0)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
         having siteNum > 0
         union all
         select
         '全国'                                               as dataGranularityFirst,
         concat('1', '')                                    as orderFirst,
-        secondary_cover_scene                              as dataGranularitySecond,
-        concat('1', secondary_cover_scene)                 as orderSecond,
+        building_site_secondary_cover_scene                              as dataGranularitySecond,
+        concat('1', building_site_secondary_cover_scene)                 as orderSecond,
         ''                                                 as dataGranularityThird,
         ''                                                 as orderThird,
         groupUniqArray(if(built_state == '10',scoring_threshold, null)) as newStockScoringThresholdArray,
         groupUniqArray(if(built_state == '11',scoring_threshold, null)) as newNewScoringThresholdArray,
-        count(1)                                           as siteNum,
-        count(if(built_state == '10', 1, null)) as newStockSiteNum,
-        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        ifNull(sum(bs_num_5g), 0)                                as siteNum,
+        sum(if(built_state == '10', bs_num_5g, 0)) as newStockSiteNum,
+        sum(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaSiteNum,
         if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                  as newStockScoringThreshold,
-        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
-        count(if(built_state == '11', 1, null)) as newNewSiteNum,
-        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1'), bs_num_5g, 0))     as newStockPassAuditSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaAndPassAuditSiteNum,
+        sum(if(built_state == '11', bs_num_5g, 0)) as newNewSiteNum,
+        sum(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaSiteNum,
         if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
-        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
-        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        sum(if(and(built_state == '11',is_high_value_by_score == '1'), bs_num_5g, 0))     as newNewPassAuditSiteNum,
+        sum(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g , 0)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
 
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
-        group by secondary_cover_scene
+        group by building_site_secondary_cover_scene
         union all
         select
         province_type                                      as dataGranularityFirst,
@@ -86,19 +86,19 @@
         ''                                                 as orderThird,
         groupUniqArray(if(built_state == '10',scoring_threshold, null)) as newStockScoringThresholdArray,
         groupUniqArray(if(built_state == '11',scoring_threshold, null)) as newNewScoringThresholdArray,
-        count(1)                                           as siteNum,
-        count(if(built_state == '10', 1, null)) as newStockSiteNum,
-        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
-        if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                 as newStockScoringThreshold,
-        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
-        count(if(built_state == '11', 1, null)) as newNewSiteNum,
-        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        ifNull(sum(bs_num_5g), 0)                                as siteNum,
+        sum(if(built_state == '10', bs_num_5g, 0)) as newStockSiteNum,
+        sum(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaSiteNum,
+        if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                  as newStockScoringThreshold,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1'), bs_num_5g, 0))     as newStockPassAuditSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaAndPassAuditSiteNum,
+        sum(if(built_state == '11', bs_num_5g, 0)) as newNewSiteNum,
+        sum(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaSiteNum,
         if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
-        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
-        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        sum(if(and(built_state == '11',is_high_value_by_score == '1'), bs_num_5g, 0))     as newNewPassAuditSiteNum,
+        sum(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g , 0)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
         group by province_type
         union all
@@ -111,27 +111,27 @@
         province_type = '四类', '4',
         province_type = '五类', '5',
         province_type = '六类', '6', '7'))       as orderFirst,
-        secondary_cover_scene                              as dataGranularitySecond,
-        concat('1', secondary_cover_scene)                 as orderSecond,
+        building_site_secondary_cover_scene                              as dataGranularitySecond,
+        concat('1', building_site_secondary_cover_scene)                 as orderSecond,
         ''                                                 as dataGranularityThird,
         ''                                                 as orderThird,
         groupUniqArray(if(built_state == '10',scoring_threshold, null)) as newStockScoringThresholdArray,
         groupUniqArray(if(built_state == '11',scoring_threshold, null)) as newNewScoringThresholdArray,
-        count(1)                                           as siteNum,
-        count(if(built_state == '10', 1, null)) as newStockSiteNum,
-        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        ifNull(sum(bs_num_5g), 0)                                as siteNum,
+        sum(if(built_state == '10', bs_num_5g, 0)) as newStockSiteNum,
+        sum(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaSiteNum,
         if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                  as newStockScoringThreshold,
-        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
-        count(if(built_state == '11', 1, null)) as newNewSiteNum,
-        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1'), bs_num_5g, 0))     as newStockPassAuditSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaAndPassAuditSiteNum,
+        sum(if(built_state == '11', bs_num_5g, 0)) as newNewSiteNum,
+        sum(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaSiteNum,
         if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
-        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
-        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        sum(if(and(built_state == '11',is_high_value_by_score == '1'), bs_num_5g, 0))     as newNewPassAuditSiteNum,
+        sum(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g , 0)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
-        group by province_type, secondary_cover_scene
+        group by province_type, building_site_secondary_cover_scene
         union all
         select
         province_type                                      as dataGranularityFirst,
@@ -148,19 +148,19 @@
         ''                                                 as orderThird,
         groupUniqArray(if(built_state == '10',scoring_threshold, null)) as newStockScoringThresholdArray,
         groupUniqArray(if(built_state == '11',scoring_threshold, null)) as newNewScoringThresholdArray,
-        count(1)                                           as siteNum,
-        count(if(built_state == '10', 1, null)) as newStockSiteNum,
-        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
+        ifNull(sum(bs_num_5g), 0)                                as siteNum,
+        sum(if(built_state == '10', bs_num_5g, 0)) as newStockSiteNum,
+        sum(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaSiteNum,
         if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                  as newStockScoringThreshold,
-        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
-        count(if(built_state == '11', 1, null)) as newNewSiteNum,
-        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1'), bs_num_5g, 0))     as newStockPassAuditSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaAndPassAuditSiteNum,
+        sum(if(built_state == '11', bs_num_5g, 0)) as newNewSiteNum,
+        sum(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaSiteNum,
         if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
-        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
-        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        sum(if(and(built_state == '11',is_high_value_by_score == '1'), bs_num_5g, 0))     as newNewPassAuditSiteNum,
+        sum(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g , 0)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
         group by province_type, province_name
         union all
@@ -175,25 +175,25 @@
         province_type = '六类', '6', '7'))       as orderFirst,
         province_name                                      as dataGranularitySecond,
         concat('2', any(toString(province_order)))         as orderSecond,
-        secondary_cover_scene                              as dataGranularityThird,
-        concat('1', secondary_cover_scene)                 as orderThird,
+        building_site_secondary_cover_scene                              as dataGranularityThird,
+        concat('1', building_site_secondary_cover_scene)                 as orderThird,
         groupUniqArray(if(built_state == '10',scoring_threshold, null)) as newStockScoringThresholdArray,
         groupUniqArray(if(built_state == '11',scoring_threshold, null)) as newNewScoringThresholdArray,
-        count(1)                                           as siteNum,
-        count(if(built_state == '10', 1, null)) as newStockSiteNum,
-        count(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaSiteNum,
-        if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                 as newStockScoringThreshold,
-        count(if(and(built_state == '10',is_high_value_by_score == '1'), 1, null))     as newStockPassAuditSiteNum,
-        count(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newStockSpeGuaAndPassAuditSiteNum,
-        count(if(built_state == '11', 1, null)) as newNewSiteNum,
-        count(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaSiteNum,
+        ifNull(sum(bs_num_5g), 0)                                as siteNum,
+        sum(if(built_state == '10', bs_num_5g, 0)) as newStockSiteNum,
+        sum(if(and(built_state == '10',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaSiteNum,
+        if(length(newStockScoringThresholdArray) > 1, null, newStockScoringThresholdArray[1])                  as newStockScoringThreshold,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1'), bs_num_5g, 0))     as newStockPassAuditSiteNum,
+        sum(if(and(built_state == '10',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newStockSpeGuaAndPassAuditSiteNum,
+        sum(if(built_state == '11', bs_num_5g, 0)) as newNewSiteNum,
+        sum(if(and(built_state == '11',spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaSiteNum,
         if(length(newNewScoringThresholdArray) > 1, null, newNewScoringThresholdArray[1])                  as newNewScoringThreshold,
-        count(if(and(built_state == '11',is_high_value_by_score == '1'), 1, null))     as newNewPassAuditSiteNum,
-        count(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), 1, null))     as newNewSpeGuaAndPassAuditSiteNum,
-        intDivOrZero(toDecimal64(count(if(is_high_value_by_score == '1', 1 , null)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
-        from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+        sum(if(and(built_state == '11',is_high_value_by_score == '1'), bs_num_5g, 0))     as newNewPassAuditSiteNum,
+        sum(if(and(built_state == '11',is_high_value_by_score == '1', spe_gua <![CDATA[ <> ]]> ''), bs_num_5g, 0))     as newNewSpeGuaAndPassAuditSiteNum,
+        intDivOrZero(toDecimal64(sum(if(is_high_value_by_score == '1', bs_num_5g , 0)), 2) * 100, toDecimal64(siteNum, 2)) as passAuditRatio
+        from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
         where event_id = #{params.raw.id}
-        group by province_type, province_name, secondary_cover_scene
+        group by province_type, province_name, building_site_secondary_cover_scene
         ) a1
         order by a1.orderFirst, a1.orderSecond, a1.orderThird
     </select>
