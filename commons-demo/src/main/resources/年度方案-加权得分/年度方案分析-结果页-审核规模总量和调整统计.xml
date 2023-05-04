@@ -34,34 +34,34 @@
                a1.adjustReason as adjustReason
         from(
                 select multiIf(built_state == '10', '待建存量站',built_state == '11', '待建新建站', '') as siteType,
-                       count(1) as siteNum,
-                       count(if(is_high_value_by_score = '1', 1, null)) as passAuditSiteNum,
+                       ifNull(sum(bs_num_5g), 0) as siteNum,
+                       sum(if(is_high_value_by_score = '1', bs_num_5g, 0)) as passAuditSiteNum,
                        intDivOrZero(toDecimal64(passAuditSiteNum, 4), siteNum) * 100 as passAuditRatio,
-                       count(if(and(is_high_value_by_score = '1', or(indicator1_grade_level == 1, indicator6_grade_level == 1, indicator3_grade_level == 1)), 1, null)) as baseIndicatorAnalysisPassAuditSiteNum,
-                       count(if(and(is_high_value_by_score = '1', or(indicator4_grade_level == 1, indicator12_grade_level == 1, indicator11_grade_level == 1, indicator7_grade_level = 1)), 1, null)) as baseMarketAuaranteePassAuditSiteNum,
+                       sum(if(and(is_high_value_by_score = '1', or(indicator1_grade_level == 1, indicator6_grade_level == 1, indicator3_grade_level == 1)), bs_num_5g, 0)) as baseIndicatorAnalysisPassAuditSiteNum,
+                       sum(if(and(is_high_value_by_score = '1', or(indicator4_grade_level == 1, indicator12_grade_level == 1, indicator11_grade_level == 1, indicator7_grade_level = 1)), bs_num_5g, 0)) as baseMarketAuaranteePassAuditSiteNum,
                        if(max(is_high_value_by_manual_work) != '', 1, 0) as isAdjust,
-                       if(isAdjust, count(if(is_high_value_by_manual_work = '1', 1, null)), null) as adjustedSiteNum,
-                       count(if(is_high_value_by_score = '1' and is_high_value_by_manual_work !='', 1, null)) as adjustedPassAuditSiteNum,
+                       if(isAdjust, sum(if(is_high_value_by_manual_work = '1', bs_num_5g, 0)), null) as adjustedSiteNum,
+                       sum(if(is_high_value_by_score = '1' and is_high_value_by_manual_work !='', bs_num_5g, 0)) as adjustedPassAuditSiteNum,
                        if(isAdjust,adjustedSiteNum - adjustedPassAuditSiteNum, null) as contrastByPassAuditSiteNum,
                        if(isAdjust,arrayStringConcat(groupUniqArray(if(manual_work_reason != '', concat(province_name,':',manual_work_reason), null)), ';'), null) as adjustReason,
                        multiIf(siteType == '全量站', 1, siteType == '待建存量站', 2, siteType == '待建新建站', 3,4) orderColumn
-                from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
                 where event_id = #{params.raw.id}
                 group by built_state
                 union all
                 select '全量站' as siteType,
-                       count(1) as siteNum,
-                       count(if(is_high_value_by_score = '1', 1, null)) as passAuditSiteNum,
+                       ifNull(sum(bs_num_5g), 0) as siteNum,
+                       sum(if(is_high_value_by_score = '1', bs_num_5g, 0)) as passAuditSiteNum,
                        intDivOrZero(toDecimal64(passAuditSiteNum, 4), siteNum) * 100 as passAuditRatio,
-                       count(if(and(is_high_value_by_score = '1', or(indicator1_grade_level == 1, indicator6_grade_level == 1, indicator3_grade_level == 1)), 1, null)) as baseIndicatorAnalysisPassAuditSiteNum,
-                       count(if(and(is_high_value_by_score = '1', or(indicator4_grade_level == 1, indicator12_grade_level == 1, indicator11_grade_level == 1, indicator7_grade_level = 1)), 1, null)) as baseMarketAuaranteePassAuditSiteNum,
+                       sum(if(and(is_high_value_by_score = '1', or(indicator1_grade_level == 1, indicator6_grade_level == 1, indicator3_grade_level == 1)), bs_num_5g, 0)) as baseIndicatorAnalysisPassAuditSiteNum,
+                       sum(if(and(is_high_value_by_score = '1', or(indicator4_grade_level == 1, indicator12_grade_level == 1, indicator11_grade_level == 1, indicator7_grade_level = 1)), bs_num_5g, 0)) as baseMarketAuaranteePassAuditSiteNum,
                        if(max(is_high_value_by_manual_work) != '', 1, 0) as isAdjust,
-                       if(isAdjust, count(if(is_high_value_by_manual_work = '1', 1, null)), null) as adjustedSiteNum,
-                       count(if(is_high_value_by_score = '1' and is_high_value_by_manual_work !='', 1, null)) as adjustedPassAuditSiteNum,
+                       if(isAdjust, sum(if(is_high_value_by_manual_work = '1', bs_num_5g, 0)), null) as adjustedSiteNum,
+                       sum(if(is_high_value_by_score = '1' and is_high_value_by_manual_work !='', bs_num_5g, 0)) as adjustedPassAuditSiteNum,
                        if(isAdjust,adjustedSiteNum - adjustedPassAuditSiteNum, null) as contrastByPassAuditSiteNum,
                        if(isAdjust,arrayStringConcat(groupUniqArray(if(manual_work_reason != '', concat(province_name,':',manual_work_reason), null)), ';'), null) as adjustReason,
                        multiIf(siteType == '全量站', 1, siteType == '待建存量站', 2, siteType == '待建新建站', 3,4) orderColumn
-                from cmdi_pvopp.dwd_weighted_score_for_annual_plan_indoor_info
+                from cmdi_pvopp.ads_indoor_weighted_score_for_annual_plan_info
                 where event_id = #{params.raw.id}
             ) a1
             global right join (
