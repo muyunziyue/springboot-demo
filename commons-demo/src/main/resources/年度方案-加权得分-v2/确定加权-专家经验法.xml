@@ -212,7 +212,9 @@
            dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
            create_time,
            last_update_time,
-           frequency_5g)
+           frequency_5g,
+        five_high_indicator_list,
+        built_reason_list)
         select upper(replaceAll(CAST(generateUUIDv4(), 'String'), '-', '')) as id,
         any(b1.site_type) as site_type,
         any(b1.built_state) as built_state,
@@ -428,7 +430,37 @@
         any(b1.dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id) as dwd_indoor_site_bom_plan_match_for_annual_plan_info_event_id,
         now() as create_time,
         now() as last_update_time,
-        any(b1.frequency_5g) as frequency_5g
+        any(b1.frequency_5g) as frequency_5g,
+        groupUniqArray(if(or(b1.indicator_level == 1, b1.is_indicator_one_vote), --满足一票通过或一级的指标
+        multiIf(b1.indicator_name == 'vert_ind', '高价值',
+        b1.indicator_name == '5g_to_4g', '高流量',
+        b1.indicator_name == 'wireless_utilization', '高流量',
+        b1.indicator_name == 'flow_density', '高流量',
+        b1.indicator_name == 'scene_value', '高价值',
+        b1.indicator_name == 'rrc_link', '高流量',
+        b1.indicator_name == '5g_terminal_penetration', '高终端',
+        b1.indicator_name == 'rival_pre', '高价值',
+        b1.indicator_name == 'flow_cost', '高价值',
+        b1.indicator_name == 'site_cost', '高价值',
+        b1.indicator_name == 'deep_coverage', '高质量',
+        b1.indicator_name == 'network_complaints', '高价值',
+        b1.indicator_name == 'policy_guarantee', '高价值',null
+        ), null)) as five_high_indicator_list,
+        groupUniqArray(if(or(b1.indicator_level == 1, b1.is_indicator_one_vote), --满足一票通过或一级的指标
+        multiIf(b1.indicator_name == 'vert_ind', '特殊保障场景',
+        b1.indicator_name == '5g_to_4g', '5G高倒流',
+        b1.indicator_name == 'wireless_utilization', '4G高流量',
+        b1.indicator_name == 'flow_density', '4G高流量',
+        b1.indicator_name == 'scene_value', '室内高价值场景',
+        b1.indicator_name == 'rrc_link', '4G高流量',
+        b1.indicator_name == '5g_terminal_penetration', '有机无网',
+        b1.indicator_name == 'rival_pre', '区域竞争',
+        b1.indicator_name == 'flow_cost', '流量成本',
+        b1.indicator_name == 'site_cost', '流量成本',
+        b1.indicator_name == 'deep_coverage', '弱覆盖楼宇补盲',
+        b1.indicator_name == 'network_complaints', '覆盖类投诉',
+        b1.indicator_name == 'policy_guarantee', '特殊保障场景',null
+        ), null))  as built_reason_list
         from (
         select a1.id as aid,
         a1.site_type,
